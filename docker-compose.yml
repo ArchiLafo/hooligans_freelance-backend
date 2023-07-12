@@ -1,0 +1,15 @@
+version: "3"
+services:
+  postgres:
+    container_name: nestjs-postgres
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    env_file:
+      - docker.env
+    networks:
+      - postgres
+ 
+networks:
+  postgres:
+    driver: bridge
