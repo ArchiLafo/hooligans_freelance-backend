@@ -57,20 +57,20 @@ export class PlanController
     }
 
     //Отмена записи услуги
-    // @UseGuards(JwtAuthenticationGuard, PlanGuard, ClientGuard)
-    // @Patch('cancel/:id')
-    // @ApiOperation({ summary: "Отменить запись на услугу" })
-    // @ApiParam({
-    //     name: 'id',
-    //     required: true,
-    //     description: 'Должен быть ID записи, который существует в базе данных',
-    //     type: Number
-    //   })
-    // @ApiResponse({ description: 'Запись отменена', })
-    // async cancelPlan(@Param('id', ParseIntPipe) id: number, @Req() request: RequestWithUser)
-    // {
-    //     return await this.planService.cancelPlan(id)
-    // }
+    @UseGuards(JwtAuthenticationGuard, ClientGuard)
+    @Patch('cancel/:id')
+    @ApiOperation({ summary: "Отменить запись на услугу" })
+    @ApiParam({
+        name: 'id',
+        required: true,
+        description: 'Должен быть ID записи, который существует в базе данных',
+        type: Number
+      })
+    @ApiResponse({ description: 'Запись отменена', })
+    async cancelPlan(@Param('id', ParseIntPipe) id: number, @Req() request: RequestWithUser)
+    {
+        return await this.planService.cancelPlan(id)
+    }
 
     //Удаление услуги
     @UseGuards(JwtAuthenticationGuard, PlanGuard)
