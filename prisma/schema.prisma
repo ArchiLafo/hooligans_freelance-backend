@@ -47,7 +47,7 @@ model Plan{
   product     Product   @relation(fields: [idProduct], references: [id])  
 }
 
-
+// роль
 enum Role {
   User
   Moderator
