@@ -4,8 +4,7 @@ import CreateUserDto from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ProductService } from 'src/product/product.service';
 import SetAwatarDto from './dto/set-awatar.dto';
-import User from './user.entity';
-
+import { User } from '@prisma/client';
 @Injectable()
 export class UsersService {
   constructor(private readonly prismaService: PrismaService, private readonly productService: ProductService) {}

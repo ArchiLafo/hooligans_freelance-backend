@@ -3,9 +3,8 @@ import CreateProductDto from './dto/create-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import UpdateProductDto from './dto/update-product.dto';
-import User from 'src/users/user.entity';
-import { elementAt } from 'rxjs';
 
+import { User } from '@prisma/client';
 
 @Injectable()
 export class ProductService {

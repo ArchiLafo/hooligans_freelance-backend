@@ -1,7 +1,8 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import CreatePlanDto from './dto/create-plan.dto';
-import User from 'src/users/user.entity';
+
+import { User } from '@prisma/client';
 
 
 @Injectable()
