@@ -1,13 +1,13 @@
 import { IsNotEmpty, } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SetAwatarDto {
+export class SetAvatarDto {
     @ApiProperty({
         description: 'Фотография профиля пользователя',
         example: './images/unused-profile-preview.jpg',
       })
     @IsNotEmpty()
-    awatar: string
+    avatar: string
 }
 
-export default SetAwatarDto;
+export default SetAvatarDto;

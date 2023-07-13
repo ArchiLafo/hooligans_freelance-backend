@@ -19,7 +19,7 @@ model User {
   updatedAt DateTime  @updatedAt
   products  Product[] 
   role      Role      @default(User)
-  awatar    String?   @default("./images/unused-profile-preview.jpg")
+  avatar    String?   @default("./images/unused-profile-preview.jpg")
 }
 
 model Product {
@@ -42,7 +42,11 @@ model Product {
 model Plan{
   id          Int       @id @default(autoincrement())
   clientId    Int?      
-  dayTime     DateTime      
+  year        String
+  month       String
+  day         String
+  hours       String
+  minutes     String
   idProduct   Int
   product     Product   @relation(fields: [idProduct], references: [id])  
 }

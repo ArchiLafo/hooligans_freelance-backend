@@ -6,6 +6,7 @@ import CreatePlanDto from './dto/create-plan.dto';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import PlanGuard from 'src/guard/plan.guard';
 import ClientGuard from 'src/guard/client.guard';
+import { UpdatePlanDto } from './dto/update-plan.dto';
 
 
 @ApiTags('Plan')
@@ -35,9 +36,9 @@ export class PlanController
         type: Number
       })
     @ApiResponse({ description: 'Запись на услугу', })
-    async singUpPlan(@Body() plan, @Req() request: RequestWithUser)
+    async singUpPlan(@Param('id', ParseIntPipe) id: number, @Req() request: RequestWithUser)
     {
-        return await this.planService.singUpPlan(plan.idPlan, request.user)
+        return await this.planService.singUpPlan(id, request.user)
     }
 
     // Обновление имение услуги
@@ -51,9 +52,9 @@ export class PlanController
         type: Number
       })
     @ApiResponse({ description: 'Обновлненная запись', })
-    async update(@Body() plan, @Req() request: RequestWithUser, @Param('id', ParseIntPipe) id: number)
+    async update(@Body() updatePlan: UpdatePlanDto, @Req() request: RequestWithUser, @Param('id', ParseIntPipe) id: number)
     {
-        return await this.planService.update(id, plan.dayTime)
+        return await this.planService.update(id, updatePlan)
     }
 
     //Отмена записи услуги

@@ -44,7 +44,7 @@ export class UsersController
 
   // Обновление аватара пользователя
   @UseGuards(JwtAuthenticationGuard)
-  @Patch('awatar')
+  @Patch('avatar')
   @ApiOperation({ summary: "Изменить фотографию профиля пользователя" })
   @ApiConsumes('multipart/form-data')
   @ApiBody({ description: 'Картинка', })
@@ -54,20 +54,20 @@ export class UsersController
       destination: Customization.destinationPath,
       filename: Customization.customFileName,
     })}))
-  async setAwatar(@UploadedFile() file: Express.Multer.File, @Req() request: RequestWithUser) {
+  async setAvatar(@UploadedFile() file: Express.Multer.File, @Req() request: RequestWithUser) {
     const user = request.user;
     if (file == undefined)
     {
       throw new HttpException("Bad picture", HttpStatus.BAD_REQUEST)
     }
-    if (user.awatar != "./images/unused-profile-preview.jpg") {
-      await fs.unlink(user.awatar, (err) => {
+    if (user.avatar != "./images/unused-profile-preview.jpg") {
+      await fs.unlink(user.avatar, (err) => {
         if (err) {
          throw new HttpException("Problems with your picture", HttpStatus.BAD_REQUEST);
         }});
     }
-    return this.usersService.updateAwatar({
-      awatar: file.destination + file.filename,
+    return this.usersService.updateAvatar({
+      avatar: file.destination + file.filename,
     }, user);
   }
 
@@ -126,6 +126,7 @@ export class UsersController
   async getMyPlans(@Req() request: RequestWithUser)
   {
     const user = request.user;
+    console.log(user);
     return await this.usersService.getMyPlans(user);
   }
 }

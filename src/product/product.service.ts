@@ -5,6 +5,7 @@ import { NotFoundException } from '@nestjs/common/exceptions';
 import UpdateProductDto from './dto/update-product.dto';
 
 import { User } from '@prisma/client';
+import { DatetimeCustomization } from './datetime.configure';
 
 @Injectable()
 export class ProductService {
@@ -58,7 +59,7 @@ export class ProductService {
             author: {
               select: {
                 name: true,
-                awatar: true    
+                avatar: true    
               }
             }
           }
@@ -79,7 +80,7 @@ export class ProductService {
           author: {
             select: {
               name: true,
-              awatar: true, 
+              avatar: true, 
               email: true   
             }
           }
@@ -102,7 +103,7 @@ export class ProductService {
             select:
             {
               name: true,
-              awatar: true
+              avatar: true
             }
           }
         }
@@ -111,32 +112,26 @@ export class ProductService {
     }
 
     // Получение записей на услуги, на которую ещё никто не записался
-    async getAllPlansProductForUsers(productId) 
-    {
-      let arr: any[] = [];
-      if (!(await this.prismaService.product.findUnique( { //Проверку незя удалять, ибо у нас не стоят гуарды. А не стоят гуарды, потому что данный метод могут использовать прямо все
+    async getAllPlansProductForUsers(productId) {
+      //Проверку незя удалять, ибо у нас не стоят гуарды. А не стоят гуарды, потому что данный метод могут использовать прямо все
+      if (!(await this.prismaService.product.findUnique( {
           where: {
             id: productId
           }
-        }
-        ))
-      )
-      {
+        }))
+      ) {
         throw new NotFoundException('Not found this product')
       }
       const plansProduct = await this.prismaService.plan.findMany({where: {
         idProduct: productId,
         clientId: null
       }})
+      // массив для записей
+      let arr: any[] = [];
       plansProduct.forEach(element => {
-        const time = new Date(element.dayTime)
         arr.push({ 
           "record": element,
-          "year": time.getFullYear(),
-          "month": time.getMonth(),
-          "day": time.getDay(),
-          "hours": time.getHours(),
-          "minutes": time.getMinutes(),
+          "datename": DatetimeCustomization.customDatetime,
         })
       })
       return arr;
