@@ -42,11 +42,7 @@ model Product {
 model Plan{
   id          Int       @id @default(autoincrement())
   clientId    Int?      
-  year        String
-  month       String
-  day         String
-  hours       String
-  minutes     String
+  datetime    String
   idProduct   Int
   product     Product   @relation(fields: [idProduct], references: [id])  
 }

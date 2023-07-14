@@ -7,16 +7,16 @@ import { UpdatePlanDto } from './dto/update-plan.dto';
 
 
 @Injectable()
-export class PlanService 
-{
+export class PlanService {
   constructor(private readonly prismaService: PrismaService) {}
   
   // Создание записи на услугу
   async create(planData: CreatePlanDto) 
   {
+    const datetime = "1"
     const newPlan = await this.prismaService.plan.create({
       data: {
-        ...planData,
+        datetime: datetime,
         clientId: null
       }
     }); 
