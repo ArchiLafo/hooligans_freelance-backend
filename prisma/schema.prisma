@@ -18,6 +18,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   products  Product[] 
+  plans     Plan[] 
   role      Role      @default(User)
   avatar    String?   @default("./images/unused-profile-preview.jpg")
 }
@@ -41,9 +42,10 @@ model Product {
 
 model Plan{
   id          Int       @id @default(autoincrement())
-  clientId    Int?      
+  clientId    Int?  
   datetime    String
   idProduct   Int
+  client      User?     @relation(fields: [clientId], references: [id])
   product     Product   @relation(fields: [idProduct], references: [id])  
 }
 

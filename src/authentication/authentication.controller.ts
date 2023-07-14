@@ -35,9 +35,10 @@ export class AuthenticationController {
     description: 'Данные пользователя, без пароля'
   })
   async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
-    console.log(request)
+    console.log("Логин реквест: " + request.user.email)
     const { user } = request
     const cookie = await this.authenticationService.getCookieWithJwtToken(user.id)
+    console.log("Насрал куки в ваши руки: " + cookie)
     request.res.set('Set-Cookie', cookie)
     user.password = undefined
     return request.res.send(user) 
@@ -51,7 +52,8 @@ export class AuthenticationController {
    status: 200,
     description: 'Пользователь вышел из аккаунта'
     })
-  async logOut(@Req()request:RequestWithUser,@Res() response: Response) {
+  async logOut(@Req() request: RequestWithUser, @Res() response: Response) {
+    console.log("Пользователь " + request.user.email + " вышел")
     response.setHeader('Set-Cookie', await this.authenticationService.getCookieForLogOut());
     return response.sendStatus(200);
   }
@@ -64,7 +66,9 @@ export class AuthenticationController {
    description: 'Данные пользователя, без пароля'
   })
   async authenticate(@Req() request: RequestWithUser) {
-    const user = await request.user;  
-    return await user;
+    console.log("Куки из ауфа: " + request.cookies.Authentication)
+    const user = request.user; 
+    user.password = undefined; 
+    return user;
   }
 }
