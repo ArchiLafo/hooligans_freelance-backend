@@ -122,20 +122,17 @@ export class ProductService {
       ) {
         throw new NotFoundException('Not found this product')
       }
-      const plansProduct = await this.prismaService.plan.findMany({where: {
+      return await this.prismaService.plan.findMany({
+        where: {
         idProduct: productId,
         clientId: null
-      }})
-      // массив для записей
-      let arr: any[] = [];
-      plansProduct.forEach(element => {
-        arr.push({ 
-          "record": element,
-          "datename": DatetimeCustomization.customDatetime,
-        })
-      })
-      return arr;
-    }
+      },
+      select: {
+        id: true,
+        datetime: true,
+      }
+    })
+  }
 
     // Получение записей на услуги, на которую кто-нибудь записался
     async getAllPlansProductForAdmin(productId) 

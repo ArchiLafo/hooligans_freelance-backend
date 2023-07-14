@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ProductService } from 'src/product/product.service';
 import SetAvatarDto from './dto/set-avatar.dto';
 import { User } from '@prisma/client';
+import { DatetimeCustomization } from 'src/product/datetime.configure';
 @Injectable()
 export class UsersService {
   constructor(private readonly prismaService: PrismaService, private readonly productService: ProductService) {}
@@ -73,25 +74,19 @@ export class UsersService {
         id: id,
       },
     });  
-    if (user == null) {
-      throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND,)
-    }  
     return await this.productService.getProductsByUser(user)
   }
 
   // Получение услуг, на которые записан юзер
   async getMyPlans(user: User) {
     return await this.prismaService.plan.findMany( {
+      select: {
+        id: true,
+        clientId: true,
+        product: true,
+      },
       where: {
         clientId: user.id
-      },
-      include: {
-        product: {
-          select: {
-            title: true,
-            description: true,
-          }
-        }
       },
     })
   } 
