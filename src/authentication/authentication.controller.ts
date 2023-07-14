@@ -35,7 +35,7 @@ export class AuthenticationController {
     description: 'Данные пользователя, без пароля'
   })
   async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
-    console.log(request)
+    console.log("Логин реквест: " + request.user.email)
     const { user } = request
     const cookie = await this.authenticationService.getCookieWithJwtToken(user.id)
     console.log("Насрал куки в ваши руки: " + cookie)
@@ -66,7 +66,9 @@ export class AuthenticationController {
    description: 'Данные пользователя, без пароля'
   })
   async authenticate(@Req() request: RequestWithUser) {
-    const user = await request.user;  
-    return await user;
+    console.log("Куки из ауфа: " + request.cookies.Authentication)
+    const user = request.user; 
+    user.password = undefined; 
+    return user;
   }
 }

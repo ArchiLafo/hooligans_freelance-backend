@@ -5,7 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ProductService } from 'src/product/product.service';
 import SetAvatarDto from './dto/set-avatar.dto';
 import { User } from '@prisma/client';
-import { DatetimeCustomization } from 'src/product/datetime.configure';
+
 @Injectable()
 export class UsersService {
   constructor(private readonly prismaService: PrismaService, private readonly productService: ProductService) {}
@@ -98,12 +98,12 @@ export class UsersService {
         id: id,
       },
     });
-    console.log(user);
+    console.log("Получили по id юзера: " + user.email);
     if (user) {
       user.password = undefined;
       return user;
     }
-    throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND,
+    throw new HttpException('User wit*h this id does not exist', HttpStatus.NOT_FOUND,
     );
   }
 }
