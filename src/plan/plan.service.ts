@@ -51,20 +51,15 @@ export class PlanService
   }
 
   // Отмена записи на услугу
-  async cancelPlan(idPlan: number)
-  {
-    return await this.prismaService.plan.update(
-      {
-        where:
-        {
-          id: idPlan
-        },
-        data:
-        {
-          clientId: null
-        }
+  async cancelPlan(idPlan: number) {
+    return await this.prismaService.plan.update( {
+      where: {
+        id: idPlan
+      },
+      data: {
+        clientId: null
       }
-    )
+    })
   }
 
   // Обновление времени услуги

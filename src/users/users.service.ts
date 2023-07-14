@@ -53,6 +53,7 @@ export class UsersService {
 
   // Получение юзреров по id
   async getByEmail(email: string) {
+    console.log("geter: " + email)
     const user = await this.prismaService.user.findUnique({
       where: {
         email,
@@ -61,7 +62,7 @@ export class UsersService {
     if (user) {
       return user;
     }
-    throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND, );
+    throw new HttpException('Да, это я и сломал код', HttpStatus.NOT_FOUND, );
   }
   
 
@@ -79,16 +80,20 @@ export class UsersService {
   }
 
   // Получение услуг, на которые записан юзер
-  async getMyPlans(user: User)
-  {
-    return await this.prismaService.plan.findMany(
-      {
-        where:
-        {
-          clientId: user.id
+  async getMyPlans(user: User) {
+    return await this.prismaService.plan.findMany( {
+      where: {
+        clientId: user.id
+      },
+      include: {
+        product: {
+          select: {
+            title: true,
+            description: true,
+          }
         }
-      }
-    )
+      },
+    })
   } 
 
   // Получение юзера по id
