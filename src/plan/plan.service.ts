@@ -17,6 +17,7 @@ export class PlanService {
     const newPlan = await this.prismaService.plan.create({
       data: {
         datetime: datetime,
+        idProduct: planData.idProduct,
         clientId: null
       }
     }); 
