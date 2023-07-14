@@ -63,7 +63,7 @@ export class UsersService {
     if (user) {
       return user;
     }
-    throw new HttpException('Да, это я и сломал код', HttpStatus.NOT_FOUND, );
+    throw new HttpException('Wrong email', HttpStatus.NOT_FOUND, );
   }
   
 
