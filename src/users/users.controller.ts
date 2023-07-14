@@ -28,23 +28,23 @@ export class UsersController
   }
 
   // Получение юзера по email
-  @Get(':email')
-  @ApiOperation({ summary: "Получить пользователя по логину" })
-  @ApiParam({
-    name: 'email',
-    required: true,
-    description: 'Должен быть email пользователя, который существует в базе данных',
-    type: String
-  })
-  @ApiResponse({ description: 'Пользователь', })
-  async findOneByMail(@Param('email') email: string) 
-  {
-    return await this.usersService.getByEmail(email);
-  }
+  // @Get(':email')
+  // @ApiOperation({ summary: "Получить пользователя по логину" })
+  // @ApiParam({
+  //   name: 'email',
+  //   required: true,
+  //   description: 'Должен быть email пользователя, который существует в базе данных',
+  //   type: String
+  // })
+  // @ApiResponse({ description: 'Пользователь', })
+  // async findOneByMail(@Param('email') email: string) 
+  // {
+  //   return await this.usersService.getByEmail(email);
+  // }
 
   // Обновление аватара пользователя
   @UseGuards(JwtAuthenticationGuard)
-  @Patch('awatar')
+  @Patch('avatar')
   @ApiOperation({ summary: "Изменить фотографию профиля пользователя" })
   @ApiConsumes('multipart/form-data')
   @ApiBody({ description: 'Картинка', })
@@ -54,23 +54,36 @@ export class UsersController
       destination: Customization.destinationPath,
       filename: Customization.customFileName,
     })}))
-  async setAwatar(@UploadedFile() file: Express.Multer.File, @Req() request: RequestWithUser) {
+  async setAvatar(@UploadedFile() file: Express.Multer.File, @Req() request: RequestWithUser) {
     const user = request.user;
     if (file == undefined)
     {
       throw new HttpException("Bad picture", HttpStatus.BAD_REQUEST)
     }
-    if (user.awatar != "./images/unused-profile-preview.jpg") {
-      await fs.unlink(user.awatar, (err) => {
+    if (user.avatar != "./images/unused-profile-preview.jpg") {
+      await fs.unlink(user.avatar, (err) => {
         if (err) {
          throw new HttpException("Problems with your picture", HttpStatus.BAD_REQUEST);
         }});
     }
-    return this.usersService.updateAwatar({
-      awatar: file.destination + file.filename,
+    return this.usersService.updateAvatar({
+      avatar: file.destination + file.filename,
     }, user);
   }
 
+  // Получение записей, на которые записан юзер
+  @UseGuards(JwtAuthenticationGuard)
+  @Get(':id/my-records')
+  @ApiOperation({ summary: "Получить записи пользователя" })
+  @ApiResponse({ 
+    description: 'Список записей пользователя',
+    type: Array<Plan>
+  })
+  async getMyPlans(@Req() request: RequestWithUser) {
+    const user = request.user;
+    console.log(user);
+    return await this.usersService.getMyPlans(user);
+  }
 
   // Обновление информации в профиле
   @UseGuards(JwtAuthenticationGuard)
@@ -78,8 +91,7 @@ export class UsersController
   @ApiOperation({ summary: "Изменить данные пользователя" })
   @ApiBody({ type: UpdateUserDto })
   @ApiResponse({ description: 'Измененный пользователь (без пароля)', })
-  async updateProfile(@Body() updateData: UpdateUserDto, @Req() request: RequestWithUser)
-  {
+  async updateProfile(@Body() updateData: UpdateUserDto, @Req() request: RequestWithUser){
     const user = request.user;  
     user.password = undefined;
     return this.usersService.updateProfile(updateData, user);
@@ -95,8 +107,7 @@ export class UsersController
     type: Number
   })
   @ApiResponse({ description: 'Услуги, созданные пользователем', })
-  async getUserProducts(@Param('id', ParseIntPipe) id: number) 
-  {
+  async getUserProducts(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.getProductsByUserId(id)
   }
 
@@ -110,22 +121,7 @@ export class UsersController
     type: Number
   })
   @ApiResponse({ description: 'Пользователь', })
-  async findOne(@Param('id', ParseIntPipe) id: number) 
-  {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.getById(Number(id));
-  }
-
-  // Получение записей, на которые записан юзер
-  @UseGuards(JwtAuthenticationGuard)
-  @Get('my-records')
-  @ApiOperation({ summary: "Получить записи пользователя" })
-  @ApiResponse({ 
-    description: 'Список записей пользователя',
-    type: Array<Plan>
-  })
-  async getMyPlans(@Req() request: RequestWithUser)
-  {
-    const user = request.user;
-    return await this.usersService.getMyPlans(user);
   }
 }

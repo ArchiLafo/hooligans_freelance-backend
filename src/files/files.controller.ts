@@ -3,7 +3,7 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Customization } from './files.configure';
 import { ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import SetAwatarDto from 'src/users/dto/set-awatar.dto';
+import SetAvatarDto from 'src/users/dto/set-avatar.dto';
 
 @ApiTags('Images')
 @Controller('images')
@@ -33,7 +33,7 @@ export class FilesController {
     @ApiBody({ description: 'Картинка', })
     @ApiResponse({
         description: "Путь к картинке",
-        type: SetAwatarDto,
+        type: SetAvatarDto,
     })
     @UseInterceptors(
         FileInterceptor('picture', {

@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import CreatePlanDto from './dto/create-plan.dto';
 
 import { User } from '@prisma/client';
+import { UpdatePlanDto } from './dto/update-plan.dto';
 
 
 @Injectable()
@@ -11,22 +12,11 @@ export class PlanService
   constructor(private readonly prismaService: PrismaService) {}
   
   // Создание записи на услугу
-  async create(planData) 
+  async create(planData: CreatePlanDto) 
   {
-    if (!(await this.prismaService.product.findUnique( { //Проверку незя удалять, ибо у нас не стоят гуарды. А не стоят гуарды, потому что данный метод могут использовать прямо все
-      where: {
-        id: planData.idProduct
-      }
-    }))
-    )
-    {
-      throw new NotFoundException('Not found this product')
-    }
-    const time = new Date(planData.year, planData.month - 1, planData.day, planData.hours, planData.minutes);
     const newPlan = await this.prismaService.plan.create({
       data: {
-        idProduct: planData.idProduct,
-        dayTime: time,
+        ...planData,
         clientId: null
       }
     }); 
@@ -61,39 +51,26 @@ export class PlanService
   }
 
   // Отмена записи на услугу
-  async cancelPlan(idPlan: number)
-  {
-    return await this.prismaService.plan.update(
-      {
-        where:
-        {
-          id: idPlan
-        },
-        data:
-        {
-          clientId: null
-        }
+  async cancelPlan(idPlan: number) {
+    return await this.prismaService.plan.update( {
+      where: {
+        id: idPlan
+      },
+      data: {
+        clientId: null
       }
-    )
+    })
   }
 
   // Обновление времени услуги
-  async update(idPlan: number, daytime: string)
-  {
-    return await this.prismaService.plan.update(
-      {
-        where:
-        {
-          id: idPlan
-        },
-        data:
-        {
-          dayTime: daytime
-        }
-      }
-    )
+  async update(idPlan: number, updateData: UpdatePlanDto) {
+    return await this.prismaService.plan.update( {
+      where: {
+        id: idPlan
+      },
+      data: updateData
+    })
   }
-
 
   // Удаление плана
   async deletePlan(idPlan: number)

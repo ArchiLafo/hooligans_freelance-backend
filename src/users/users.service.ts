@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import CreateUserDto from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ProductService } from 'src/product/product.service';
-import SetAwatarDto from './dto/set-awatar.dto';
+import SetAvatarDto from './dto/set-avatar.dto';
 import { User } from '@prisma/client';
 @Injectable()
 export class UsersService {
@@ -34,13 +34,13 @@ export class UsersService {
   }
 
   // Обновление аватара юзера
-  async updateAwatar(setAwatarDto: SetAwatarDto, user: User) {
+  async updateAvatar(setAvatarDto: SetAvatarDto, user: User) {
     user = await this.prismaService.user.update({
       where: { 
         id: user.id,
       }, 
       data: { 
-        awatar: setAwatarDto.awatar,
+        avatar: setAvatarDto.avatar,
       }});
     user.password = undefined;
     return user;
@@ -53,6 +53,7 @@ export class UsersService {
 
   // Получение юзреров по id
   async getByEmail(email: string) {
+    console.log("geter: " + email)
     const user = await this.prismaService.user.findUnique({
       where: {
         email,
@@ -61,7 +62,7 @@ export class UsersService {
     if (user) {
       return user;
     }
-    throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND, );
+    throw new HttpException('Да, это я и сломал код', HttpStatus.NOT_FOUND, );
   }
   
 
@@ -79,17 +80,21 @@ export class UsersService {
   }
 
   // Получение услуг, на которые записан юзер
-  async getMyPlans(user: User)
-  {
-    return await this.prismaService.plan.findMany(
-      {
-        where:
-        {
-          clientId: user.id
+  async getMyPlans(user: User) {
+    return await this.prismaService.plan.findMany( {
+      where: {
+        clientId: user.id
+      },
+      include: {
+        product: {
+          select: {
+            title: true,
+            description: true,
+          }
         }
-      }
-    )
-  }
+      },
+    })
+  } 
 
   // Получение юзера по id
   async getById(id: number) {
@@ -98,6 +103,7 @@ export class UsersService {
         id: id,
       },
     });
+    console.log(user);
     if (user) {
       user.password = undefined;
       return user;
