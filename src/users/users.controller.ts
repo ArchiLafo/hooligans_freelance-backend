@@ -14,16 +14,14 @@ import { Plan } from '@prisma/client';
 
 @ApiTags('Users')
 @Controller('users')
-export class UsersController 
-{
+export class UsersController {
   constructor(private readonly usersService: UsersService, private readonly productsService: ProductService) {}
 
   // Получение всех юзеров
   @Get()
   @ApiOperation({ summary: "Получить всех пользователей" })
   @ApiResponse({ description: 'Все пользователи', })
-  async findAll() 
-  {
+  async findAll() {
     return await this.usersService.findAll();
   }
 

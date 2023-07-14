@@ -17,6 +17,7 @@ export class PlanService {
     const datetime = DatetimeCustomization.customDatetime(planData)
     const newPlan = await this.prismaService.plan.create({
       data: {
+        // ...planData,
         datetime: datetime,
         idProduct: planData.idProduct,
         clientId: null
