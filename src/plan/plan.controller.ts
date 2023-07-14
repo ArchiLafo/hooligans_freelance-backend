@@ -24,7 +24,16 @@ export class PlanController
     {
         return await this.planService.create(planData)
     }
-
+    
+    // Получение записи по id
+    @Get('findOne/:id')
+    @ApiOperation({ summary: "Получить запись по id" })
+    @ApiResponse({ description: 'Одна запись', })
+    async getById(@Param('id', ParseIntPipe) id: number)
+    {
+      return await this.planService.getById(id)
+    }
+    
     //Юзер записывается на услугу
     @UseGuards(JwtAuthenticationGuard)
     @Patch('signup/:id')

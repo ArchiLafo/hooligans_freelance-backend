@@ -3,7 +3,6 @@ import CreateProductDto from './dto/create-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import UpdateProductDto from './dto/update-product.dto';
-
 import { User } from '@prisma/client';
 import { DatetimeCustomization } from './datetime.configure';
 
@@ -137,11 +136,22 @@ export class ProductService {
     // Получение записей на услуги, на которую кто-нибудь записался
     async getAllPlansProductForAdmin(productId) 
     {
-      return await this.prismaService.plan.findMany({where: {
+      const busyPlans = await this.prismaService.plan.findMany({where: {
+        idProduct: productId,
         clientId: {
           not: null
-        }
-      }})
+        },
+      },
+      include: {
+        client: {
+          select: {
+            name: true,
+            avatar: true,
+          }
+        },
+      }
+    })
+    return busyPlans;
     }
 
     // Получение услуги по id
