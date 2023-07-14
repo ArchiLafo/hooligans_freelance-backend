@@ -38,6 +38,7 @@ export class AuthenticationController {
     console.log(request)
     const { user } = request
     const cookie = await this.authenticationService.getCookieWithJwtToken(user.id)
+    console.log("Насрал куки в ваши руки: " + cookie)
     request.res.set('Set-Cookie', cookie)
     user.password = undefined
     return request.res.send(user) 
@@ -51,7 +52,8 @@ export class AuthenticationController {
    status: 200,
     description: 'Пользователь вышел из аккаунта'
     })
-  async logOut(@Req()request:RequestWithUser,@Res() response: Response) {
+  async logOut(@Req() request: RequestWithUser, @Res() response: Response) {
+    console.log("Пользователь " + request.user.email + " вышел")
     response.setHeader('Set-Cookie', await this.authenticationService.getCookieForLogOut());
     return response.sendStatus(200);
   }

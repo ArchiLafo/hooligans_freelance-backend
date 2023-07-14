@@ -16,7 +16,7 @@ export class AuthenticationService {
     private readonly configService: ConfigService
   ) {}
  
-  // Регистраиц юзера
+  // Регистрация юзера
   public async register(registrationData: RegisterDto) 
   {
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
