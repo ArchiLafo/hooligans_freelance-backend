@@ -115,9 +115,9 @@ export class ProductController
     description: 'Созданная услуга',
     type: CreateProductDto,
   })
-  async register(@Body() registrationData: CreateProductDto, @Req() request: RequestWithUser) 
+  async create(@Body() CreateProductData: CreateProductDto, @Req() request: RequestWithUser) 
   {
     const user = request.user; 
-    return this.productService.create(registrationData,user);
+    return this.productService.create(CreateProductData,user);
   } 
 }
