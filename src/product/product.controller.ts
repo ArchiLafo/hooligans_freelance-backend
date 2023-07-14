@@ -25,7 +25,20 @@ export class ProductController
     return await this.productService.getAllProducts()
   }
 
-    
+  @Get(':id')
+  @ApiOperation({ summary: "Получить услугу" })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'Должен быть ID услуги, которая существует в базе данных',
+    type: Number
+  })
+  @ApiResponse({ description: 'Услуга', })
+  async getOneProducts(@Param('id', ParseIntPipe) id: number)
+   {
+    return await this.productService.getOneProduct(id);
+  }
+
   @UseGuards(JwtAuthenticationGuard, AuthorGuard)
   @Patch('update/:id')
   @ApiOperation({ summary: "Изменить услугу" })
@@ -63,21 +76,7 @@ export class ProductController
      return this.productService.deleteProduct(id, user);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: "Получить услугу" })
-  @ApiParam({
-    name: 'id',
-    required: true,
-    description: 'Должен быть ID услуги, которая существует в базе данных',
-    type: Number
-  })
-  @ApiResponse({ description: 'Услуга', })
-  async getOneProducts(@Param('id', ParseIntPipe) id: number)
-   {
-    return await this.productService.getOneProduct(id);
-  }
-
-  @Get(':id/plans')
+  @Get('plans/:id')
   @ApiOperation({ summary: "Получить все доступные записи на услугу" })
   @ApiParam({
     name: 'id',
@@ -91,7 +90,7 @@ export class ProductController
     return await this.productService.getAllPlansProductForUsers(id);
   }
   @UseGuards(JwtAuthenticationGuard, AuthorGuard)
-  @Get(':id/plans/information')
+  @Get('plans/information/:id')
   @ApiOperation({ summary: "Получение заполненных записей для владельца услуги или админа" })
   @ApiParam({
     name: 'id',
