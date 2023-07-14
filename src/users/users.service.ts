@@ -83,6 +83,7 @@ export class UsersService {
       select: {
         id: true,
         clientId: true,
+        datetime: true,
         product: true,
       },
       where: {
