@@ -4,6 +4,7 @@ import CreatePlanDto from './dto/create-plan.dto';
 
 import { User } from '@prisma/client';
 import { UpdatePlanDto } from './dto/update-plan.dto';
+import { DatetimeCustomization } from 'src/product/datetime.configure';
 
 
 @Injectable()
@@ -13,7 +14,7 @@ export class PlanService {
   // Создание записи на услугу
   async create(planData: CreatePlanDto) 
   {
-    const datetime = "1"
+    const datetime = DatetimeCustomization.customDatetime(planData)
     const newPlan = await this.prismaService.plan.create({
       data: {
         datetime: datetime,
@@ -65,11 +66,14 @@ export class PlanService {
 
   // Обновление времени услуги
   async update(idPlan: number, updateData: UpdatePlanDto) {
+    const datetime = DatetimeCustomization.customDatetime(updateData)
     return await this.prismaService.plan.update( {
       where: {
         id: idPlan
       },
-      data: updateData
+      data: {
+        datetime: datetime,
+      }
     })
   }
 

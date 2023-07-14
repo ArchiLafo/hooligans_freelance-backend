@@ -27,7 +27,7 @@ export class PlanController
 
     //Юзер записывается на услугу
     @UseGuards(JwtAuthenticationGuard)
-    @Patch('singup/:id')
+    @Patch('signup/:id')
     @ApiOperation({ summary: "Записаться на услугу" })
     @ApiParam({
         name: 'id',

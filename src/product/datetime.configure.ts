@@ -1,7 +1,7 @@
 export class DatetimeCustomization {
-    static customDatetime(year: string, month: string, day: string, hours: string, minutes: string) {
+    static customDatetime(datetime) {
         const monthNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
-        const datetime = day + " " + monthNames[Number(month)] + " " + year  + " года " + hours + ":" + minutes;
-        return datetime;
+        const dater = datetime.day + " " + monthNames[Number(datetime.month) - 1] + " " + datetime.year  + " года " + datetime.hours + ":" + datetime.minutes;
+        return dater;
     }
 }

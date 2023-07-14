@@ -73,7 +73,7 @@ export class UsersController
 
   // Получение записей, на которые записан юзер
   @UseGuards(JwtAuthenticationGuard)
-  @Get(':id/my-records')
+  @Get('my-records/:id')
   @ApiOperation({ summary: "Получить записи пользователя" })
   @ApiResponse({ 
     description: 'Список записей пользователя',
@@ -98,7 +98,7 @@ export class UsersController
   }
 
   // Получение продуктов юзера
-  @Get(':id/products')
+  @Get('products/:id')
   @ApiOperation({ summary: "Получить услуги, созданные пользователем" })
   @ApiParam({
     name: 'id',
