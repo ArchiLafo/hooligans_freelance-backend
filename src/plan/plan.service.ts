@@ -62,7 +62,7 @@ export class PlanService {
       }
     })
   }
-
+  //
   // Обновление времени услуги
   async update(idPlan: number, updateData: UpdatePlanDto) {
     return await this.prismaService.plan.update( {
