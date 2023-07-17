@@ -27,7 +27,6 @@ export default class AuthorGuard implements CanActivate {
 
         const userId = user.id;
         const productId = Number(params.id);
-        // чекаем на вич, а то вдруг
         const checkedUser = await this.usersService.getById(userId)
         console.log("checkedUser: " + userId)
         const checkedProduct = await this.productService.getById(productId)
@@ -37,3 +36,4 @@ export default class AuthorGuard implements CanActivate {
         return (checkedUser.id === checkedProduct.authorId);    
     }
 }
+    

@@ -29,6 +29,7 @@ model Product {
  createdAt   DateTime  @default(now())
  updatedAt   DateTime  @updatedAt
  places      String    
+ // поменять на нижнюю
  category    String
  duration    String
  title       String?
@@ -38,6 +39,8 @@ model Product {
  author      User      @relation(fields: [authorId], references: [id])
  isPublished Boolean   @default(false)
  productPlan Plan[]
+//  categoryId  Int
+//  category    Category  @relation(fields: [categoryId], references: [id])
 } 
 
 model Plan{
@@ -48,6 +51,13 @@ model Plan{
   client      User?     @relation(fields: [clientId], references: [id])
   product     Product   @relation(fields: [idProduct], references: [id])  
 }
+
+// model Category{
+//   id           Int       @id @default(autoincrement())
+//   title        String    @unique
+//   description  String
+//   products     Product[] 
+// }
 
 enum Role {
   User
