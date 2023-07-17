@@ -18,8 +18,17 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   products  Product[] 
+  plans     Plan[] 
   role      Role      @default(User)
   avatar    String?   @default("./images/unused-profile-preview.jpg")
+  idCompany Int?
+  company   Company? @relation(fields: [idCompany], references: [id])
+}
+
+model Company{
+  id        Int       @id @default(autoincrement())
+  leaderId  Int       @unique //Чтобы юзер не имел несколько компаний
+  employer  User[]
 }
 
 model Product {
@@ -41,14 +50,16 @@ model Product {
 
 model Plan{
   id          Int       @id @default(autoincrement())
-  clientId    Int?      
+  clientId    Int?  
   datetime    String
   idProduct   Int
+  client      User?     @relation(fields: [clientId], references: [id])
   product     Product   @relation(fields: [idProduct], references: [id])  
 }
 
 enum Role {
   User
-  Moderator
+  Employer
+  Leader
   Admin
 }
