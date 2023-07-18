@@ -21,7 +21,20 @@ export class CategoryService {
         id: categoryId,
       },
       select: {
-        products: true,
+        products: {
+          select: {
+            id: true,
+            title: true,
+            cost: true,
+            description: true,
+            author: {
+              select: {
+                name: true,
+                avatar: true,
+            }
+            },
+          }
+        },
       }
     })
     return products.products;
