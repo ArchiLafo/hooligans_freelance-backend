@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import CreateEmployeeDto from './dto/create-employee.dto';
 import { Role } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -19,5 +19,20 @@ export class CompanyService {
       }
     )
     return newEmployee;
+  }
+
+  async getById(id: number)
+  {
+    const company = await this.prismaService.company.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if(company)
+    {
+      return company
+    }
+    throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND,
+    );
   }
 }
