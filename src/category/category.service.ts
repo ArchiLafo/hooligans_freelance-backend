@@ -21,8 +21,6 @@ export class CategoryService {
         id: categoryId,
       },
       select: {
-        label: true,
-        description: true,
         products: true,
       }
     })
