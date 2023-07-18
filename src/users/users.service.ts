@@ -17,7 +17,7 @@ export class UsersService {
     {
       userRole = Role.Leader
     }
-    const newUser = await this.prismaService.user.create(
+    let newUser = await this.prismaService.user.create(
       {
         data: 
         {
@@ -29,10 +29,22 @@ export class UsersService {
     console.log(newUser)
     if (isCompany)
     {
-      await this.prismaService.company.create(
+      const company = await this.prismaService.company.create(
         {
           data: {
             leaderId: newUser.id,
+          }
+        }
+      );
+      newUser = await this.prismaService.user.update(
+        {
+          where:
+          {
+            id: newUser.id
+          },
+          data:
+          {
+            idCompany: company.id
           }
         }
       )
