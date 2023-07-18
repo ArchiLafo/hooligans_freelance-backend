@@ -1,8 +1,24 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Role } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
+const roundsOfHashing = 10;
 
 async function main() {
+  const passworAdmin = await bcrypt.hash('admin@admin.com', roundsOfHashing);
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@admin.com' },
+    update: {
+      password: passworAdmin,
+    },
+    create: {
+      email: 'admin@admin.com',
+      name: 'Admin',
+      password: passworAdmin,
+      role: Role.Admin,
+    },
+  });
+
   const copywriting = await prisma.category.upsert({
     where: { label: 'Копирайтинг' },
     update: {},
@@ -72,6 +88,34 @@ async function main() {
       description: 'Дополнительные услуги, которые не попадают в другие категории, такие как видеомонтаж, анимация, консалтинг и т.д.',
     },
   });
+
+  const bestProduct = await prisma.product.upsert({
+    where: { id: 7 },
+    update: {},
+    create: {
+      description: "Лучшая услуга, которой вы только можете воспользоваться.",
+      cost: "100",
+      title: "Лучшая услуга",
+      places: "ул. Киренского, д. 26",
+      categoryId: 7,
+      authorId: 1,
+      duration: "15 минут"
+    },
+  }); 
+
+  const alsoBestProduct = await prisma.product.upsert({
+    where: { id: 7 },
+    update: {},
+    create: {
+      description: "Измененная, но все еще лучшая услуга, которой вы только можете воспользоваться.",
+      cost: "300",
+      title: "Теперь уж точно лучшая услуга",
+      places: "ул. Академика Зелинского, д. 6",
+      categoryId: 7,
+      authorId: 1,
+      duration: "2 часа"
+    },
+  }); 
 }
 
 main()
