@@ -7,6 +7,7 @@ async function main() {
     where: { label: 'Копирайтинг' },
     update: {},
     create: {
+      name: 'Copywriting',
       label: 'Копирайтинг',
       description: 'Создание продающих текстов и контента. Уникальные и убедительные сообщения для продвижения продуктов и услуг.',
     },
@@ -16,6 +17,7 @@ async function main() {
     where: { label: 'Веб-дизайн' },
     update: {},
     create: {
+      name: 'Webdesign',
       label: 'Веб-дизайн',
       description: 'Создание привлекательных и интуитивно понятных веб-сайтов с учетом пользовательского опыта и эстетики.',
     },
@@ -25,6 +27,7 @@ async function main() {
     where: { label: 'Перевод' },
     update: {},
     create: {
+      name: 'Translation',
       label: 'Перевод',
       description: 'Перевод текстов на разные языки с сохранением смысла и стиля оригинала.',
     },
@@ -34,6 +37,7 @@ async function main() {
     where: { label: 'Иллюстрации' },
     update: {},
     create: {
+      name: 'Illustrations',
       label: 'Иллюстрации',
       description: 'Создание качественных и оригинальных иллюстраций для использования в различных медиа-проектах.',
     },
@@ -43,6 +47,7 @@ async function main() {
     where: { label: 'Мобильная разработка' },
     update: {},
     create: {
+      name: 'Mobiledevelopment',
       label: 'Мобильная разработка',
       description: 'Разработка мобильных приложений для разных платформ, учитывая лучшие практики и современные технологии.',
     },
@@ -52,6 +57,7 @@ async function main() {
     where: { label: 'Фотография' },
     update: {},
     create: {
+      name: 'Photo',
       label: 'Фотография',
       description: 'Создание профессиональных фотографий для разных целей, включая портреты, природу, события и продукты.',
     },
@@ -61,6 +67,7 @@ async function main() {
     where: { label: 'Другое' },
     update: {},
     create: {
+      name: 'Other',
       label: 'Другое',
       description: 'Дополнительные услуги, которые не попадают в другие категории, такие как видеомонтаж, анимация, консалтинг и т.д.',
     },

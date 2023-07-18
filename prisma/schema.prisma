@@ -53,6 +53,7 @@ model Plan{
 
 model Category{
   id           Int       @id @default(autoincrement())
+  name         String
   label        String    @unique
   description  String
   products     Product[] 
