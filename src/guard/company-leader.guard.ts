@@ -15,8 +15,8 @@ export default class CompanyLeaderGuard implements CanActivate {
             return false;
         }
 
-        console.log(params)
-        console.log("user: " + user + "company: " + params)
+        // console.log(params)
+        // console.log("user: " + user + "company: " + params)
         if (!user || !params) {
             return false;
         }
@@ -24,9 +24,9 @@ export default class CompanyLeaderGuard implements CanActivate {
         const userId = user.id;
         const companyId = Number(params.id);
         const checkedUser = await this.usersService.getById(userId)
-        console.log("checkedUser: " + userId)
+        // console.log("checkedUser: " + userId)
         const checkedCompany = await this.companyService.getById(companyId)
-        console.log("checkedCompany: " + companyId)
+        // console.log("checkedCompany: " + companyId)
 
         // либо ты автор
         return (checkedUser.id === checkedCompany.leaderId);    
