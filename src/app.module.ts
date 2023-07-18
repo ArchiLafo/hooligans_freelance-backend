@@ -16,6 +16,7 @@ import { FilesService } from './files/files.service';
 import { FilesController } from './files/files.controller';
 import { PlanModule } from './plan/plan.module';
 import { CompanyModule } from './company/company.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
 imports: [
@@ -32,6 +33,7 @@ imports: [
     ModerationModule,
     PlanModule,
     CompanyModule,
+    CategoryModule,
   ],
   controllers: [AppController, ProductController, ModerationController, FilesController],
   providers: [AppService, ModerationService, FilesService],

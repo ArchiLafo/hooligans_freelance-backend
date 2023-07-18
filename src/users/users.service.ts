@@ -84,7 +84,7 @@ export class UsersService {
     if (user) {
       return user;
     }
-    throw new HttpException('Да, это я и сломал код', HttpStatus.NOT_FOUND, );
+    throw new HttpException('Wrong email', HttpStatus.NOT_FOUND, );
   }
   
 
@@ -100,16 +100,25 @@ export class UsersService {
 
   // Получение услуг, на которые записан юзер
   async getMyPlans(user: User) {
-    return await this.prismaService.plan.findMany( {
+    const plans = await this.prismaService.plan.findMany( {
       select: {
         id: true,
         clientId: true,
+        datetime: true,
         product: true,
       },
       where: {
         clientId: user.id
       },
     })
+    
+    // бля, это хуйня ебучая, гварды не нужны для одного условия
+    // plans.forEach(element => {
+    //   if (element.datetime > Date.now()) {
+    //     await this.prismaService.plan.delete(element)
+    //   }
+    // });
+    return plans;
   } 
 
   // Получение юзера по id
@@ -119,12 +128,12 @@ export class UsersService {
         id: id,
       },
     });
-    console.log(user);
+    console.log("Получили по id юзера: " + user.email);
     if (user) {
       user.password = undefined;
       return user;
     }
-    throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND,
+    throw new HttpException('User wit*h this id does not exist', HttpStatus.NOT_FOUND,
     );
   }
 }

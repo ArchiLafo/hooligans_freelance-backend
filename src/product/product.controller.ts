@@ -89,6 +89,7 @@ export class ProductController
   {
     return await this.productService.getAllPlansProductForUsers(id);
   }
+  
   @UseGuards(JwtAuthenticationGuard, AuthorGuard)
   @Get('plans/information/:id')
   @ApiOperation({ summary: "Получение заполненных записей для владельца услуги или админа" })

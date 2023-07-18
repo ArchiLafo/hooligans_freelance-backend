@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
   
   export class CreateProductDto {
@@ -38,8 +38,8 @@ import { ApiProperty } from '@nestjs/swagger';
       description: 'Категория услуги',
       example: 'Искусство',
     })
-    @IsString()
-    category: string
+    @IsNumber()
+    categoryId: number
 
     @ApiProperty({
       description: 'Длительность проведения услуги',
