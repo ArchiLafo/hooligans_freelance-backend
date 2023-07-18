@@ -16,7 +16,7 @@ export class CategoryService {
   }
 
   async getProducts(categoryId: number) {
-    return await this.prismaService.category.findFirst({
+    const products = await this.prismaService.category.findFirst({
       where: {
         id: categoryId,
       },
@@ -24,6 +24,7 @@ export class CategoryService {
         products: true,
       }
     })
+    return products.products;
   }
 
   findOne(id: number) {
