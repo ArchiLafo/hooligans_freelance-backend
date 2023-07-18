@@ -55,7 +55,7 @@ export class UsersService {
   // Обновление юзера
   async updateProfile(updateData: UpdateUserDto, user: User) {
     if (user.name == updateData.name) {
-      throw new HttpException('You already have this name', HttpStatus.BAD_REQUEST)
+      throw new HttpException('У вас уже это имя', HttpStatus.BAD_REQUEST)
     }
     user = await this.prismaService.user.update({
       where: {
@@ -96,7 +96,7 @@ export class UsersService {
     if (user) {
       return user;
     }
-    throw new HttpException('Wrong email', HttpStatus.NOT_FOUND, );
+    throw new HttpException('Неправильный адрес электронной почты', HttpStatus.NOT_FOUND, );
   }
   
 
@@ -145,7 +145,7 @@ export class UsersService {
       user.password = undefined;
       return user;
     }
-    throw new HttpException('User wit*h this id does not exist', HttpStatus.NOT_FOUND,
+    throw new HttpException('Пользователь с таким идентификатором не существует', HttpStatus.NOT_FOUND,
     );
   }
 }

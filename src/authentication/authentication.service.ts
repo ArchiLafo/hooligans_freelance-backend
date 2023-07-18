@@ -35,9 +35,9 @@ export class AuthenticationService {
     catch (error) 
     {
       if (error?.code === PostgresErrorCode.UniqueViolation) {
-        throw new HttpException('User with that email already exists', HttpStatus.BAD_REQUEST);
+        throw new HttpException('Пользователь с таким адресом электронной почты уже существует', HttpStatus.BAD_REQUEST);
       }
-      throw new HttpException('Something went wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException('Что-то пошло не так', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   
@@ -50,7 +50,7 @@ export class AuthenticationService {
       await this.verifyPassword(plainTextPassword, user.password);
       return user
     } catch (error) {
-      throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST,
+      throw new HttpException('Неверные учетные данные', HttpStatus.BAD_REQUEST,
       );
     }
   }
@@ -63,7 +63,7 @@ export class AuthenticationService {
       hashedPassword
     );
     if (!isPasswordMatching) {
-      throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Неверный пароль', HttpStatus.BAD_REQUEST);
     }
   }
 
