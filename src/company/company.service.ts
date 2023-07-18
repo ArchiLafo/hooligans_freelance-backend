@@ -54,4 +54,29 @@ export class CompanyService {
     fireUser.password = undefined;
     return fireUser;
   }
+
+  async getAllEmployes(idCompany: number)
+  {
+    return await this.prismaService.company.findFirst(
+      {
+        where:
+        {
+          id: idCompany
+        },
+        select:
+        {
+          employee: 
+          {
+            select:
+            {
+              id: true,
+              name: true,
+              email: true,
+              role: true
+            }
+          }
+        }
+      }
+    )
+  }
 }

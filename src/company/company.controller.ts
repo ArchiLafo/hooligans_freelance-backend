@@ -24,4 +24,10 @@ export class CompanyController {
   {
     return await this.companyService.fire(req.employeeId);
   }
+
+  @Get(':id')
+  async getAllEmployes(@Param('id', ParseIntPipe) id: number)
+  {
+    return await this.companyService.getAllEmployes(id);
+  }
 }
