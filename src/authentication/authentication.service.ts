@@ -22,12 +22,13 @@ export class AuthenticationService {
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
     try
     {
+      const isCompany = registrationData.isCompany;
+      delete registrationData.isCompany
       const createdUser = await this.usersService.create(
         {
           ...registrationData,
           password: hashedPassword,
-          role: Role.User
-        });
+        }, isCompany);
       createdUser.password = undefined;
       return createdUser;
     } 
@@ -40,6 +41,7 @@ export class AuthenticationService {
     }
   }
   
+
   // Авторизация пользователя
   public async getAuthenticatedUser(email: string, plainTextPassword: string) 
   {
