@@ -15,6 +15,7 @@ import { ModerationModule } from './moderation/moderation.module';
 import { FilesService } from './files/files.service';
 import { FilesController } from './files/files.controller';
 import { PlanModule } from './plan/plan.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
 imports: [
@@ -30,6 +31,7 @@ imports: [
     ProductModule,
     ModerationModule,
     PlanModule,
+    CompanyModule,
   ],
   controllers: [AppController, ProductController, ModerationController, FilesController],
   providers: [AppService, ModerationService, FilesService],

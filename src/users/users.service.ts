@@ -4,19 +4,39 @@ import CreateUserDto from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ProductService } from 'src/product/product.service';
 import SetAvatarDto from './dto/set-avatar.dto';
-import { User } from '@prisma/client';
-import { DatetimeCustomization } from 'src/product/datetime.configure';
+import { Role, User } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prismaService: PrismaService, private readonly productService: ProductService) {}
 
   // Создане юзеров
-  async create(userData: CreateUserDto) {
-    const role = userData.role;
-    const newUser = await this.prismaService.user.create({
-      data: userData,
-    });
+  async create(userData: CreateUserDto, isCompany: Boolean) {
+    let userRole: Role = Role.User
+    if (isCompany)
+    {
+      userRole = Role.Leader
+    }
+    const newUser = await this.prismaService.user.create(
+      {
+        data: 
+        {
+          ...userData,
+          role: userRole
+        }
+      }
+    );
+    console.log(newUser)
+    if (isCompany)
+    {
+      await this.prismaService.company.create(
+        {
+          data: {
+            leaderId: newUser.id,
+          }
+        }
+      )
+    }
     return newUser;
   }
 

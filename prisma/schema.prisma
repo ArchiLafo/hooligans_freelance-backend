@@ -14,12 +14,12 @@ model User {
   id        Int       @id @default(autoincrement())
   name      String?
   email     String    @unique
-  password  String
+  password  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   products  Product[] 
   plans     Plan[] 
-  role      Role      @default(User)
+  role      Role      
   avatar    String?   @default("./images/unused-profile-preview.jpg")
   idCompany Int?
   company   Company? @relation(fields: [idCompany], references: [id])
@@ -28,7 +28,7 @@ model User {
 model Company{
   id        Int       @id @default(autoincrement())
   leaderId  Int       @unique //Чтобы юзер не имел несколько компаний
-  employer  User[]
+  employee  User[]
 }
 
 model Product {
@@ -59,7 +59,7 @@ model Plan{
 
 enum Role {
   User
-  Employer
+  Employee
   Leader
   Admin
 }
