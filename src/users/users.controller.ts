@@ -26,19 +26,19 @@ export class UsersController {
   }
 
   // Получение юзера по email
-  // @Get(':email')
-  // @ApiOperation({ summary: "Получить пользователя по логину" })
-  // @ApiParam({
-  //   name: 'email',
-  //   required: true,
-  //   description: 'Должен быть email пользователя, который существует в базе данных',
-  //   type: String
-  // })
-  // @ApiResponse({ description: 'Пользователь', })
-  // async findOneByMail(@Param('email') email: string) 
-  // {
-  //   return await this.usersService.getByEmail(email);
-  // }
+  @Get(':email')
+  @ApiOperation({ summary: "Получить пользователя по логину" })
+  @ApiParam({
+    name: 'email',
+    required: true,
+    description: 'Должен быть email пользователя, который существует в базе данных',
+    type: String
+  })
+  @ApiResponse({ description: 'Пользователь', })
+  async findOneByMail(@Param('email') email: string) 
+  {
+    return await this.usersService.getByEmail(email);
+  }
 
   // Обновление аватара пользователя
   @UseGuards(JwtAuthenticationGuard)

@@ -22,7 +22,7 @@ export class AuthenticationController {
   })
   async register(@Body() registrationData: RegisterDto) 
   {
-    console.log(registrationData)
+    //console.log(registrationData)
     return this.authenticationService.register(registrationData);
   } 
 

@@ -82,6 +82,15 @@ export class PlanController
         return await this.planService.cancelPlan(id)
     }
 
+    // Получение записи по id
+    @Get('findOne/:id')
+    @ApiOperation({ summary: "Получить запись по id" })
+    @ApiResponse({ description: 'Одна запись', })
+    async getById(@Param('id', ParseIntPipe) id: number)
+    {
+      return await this.planService.getById(id)
+    }
+
     //Удаление услуги
     @UseGuards(JwtAuthenticationGuard, PlanGuard)
     @Delete('delete/:id')

@@ -1,4 +1,4 @@
-import { IsEmail, IsString, IsNotEmpty, MinLength, IsEnum, } from 'class-validator';
+import { IsEmail, IsString, IsNotEmpty, MinLength, IsBoolean, } from 'class-validator';
 import { Role } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -27,6 +27,10 @@ export class RegisterDto {
   @IsNotEmpty()
   @MinLength(8)
   password: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  isCompany: boolean
 }
 
 export default RegisterDto;

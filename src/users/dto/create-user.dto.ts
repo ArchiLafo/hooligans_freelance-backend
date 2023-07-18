@@ -28,13 +28,13 @@ export class CreateUserDto {
   @MinLength(8)
   password: string;
 
-  @ApiProperty({
-    description: 'Привелегии пользователя (по умолчанию User)',
-    example: 'User',
-  })
-  @IsNotEmpty()
-  @IsEnum(Role)
-  role: Role;
+  // @ApiProperty({
+  //   description: 'Привелегии пользователя (по умолчанию User)',
+  //   example: 'User',
+  // })
+  // @IsNotEmpty()
+  // @IsEnum(Role)
+  // role: Role;
 }
 
 export default CreateUserDto;

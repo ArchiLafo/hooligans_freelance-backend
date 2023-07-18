@@ -65,7 +65,7 @@ export class PlanService {
       }
     })
   }
-
+  //
   // Обновление времени услуги
   async update(idPlan: number, updateData: UpdatePlanDto) {
     const datetime = DatetimeCustomization.customDatetime(updateData)
