@@ -82,7 +82,8 @@ export class ProductService {
               avatar: true, 
               email: true   
             }
-          }
+          },
+          category: true,
         }
       });
       return product

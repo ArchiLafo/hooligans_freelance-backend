@@ -1,8 +1,24 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Role } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
+const roundsOfHashing = 10;
 
 async function main() {
+  const passworAdmin = await bcrypt.hash('admin@admin.com', roundsOfHashing);
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@admin.com' },
+    update: {
+      password: passworAdmin,
+    },
+    create: {
+      email: 'admin@admin.com',
+      name: 'Admin',
+      password: passworAdmin,
+      role: Role.Admin,
+    },
+  });
+
   const copywriting = await prisma.category.upsert({
     where: { label: 'Копирайтинг' },
     update: {},
