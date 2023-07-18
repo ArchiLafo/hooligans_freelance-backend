@@ -6,6 +6,7 @@ import { ProductService } from 'src/product/product.service';
 import SetAvatarDto from './dto/set-avatar.dto';
 import { User } from '@prisma/client';
 import { DatetimeCustomization } from 'src/product/datetime.configure';
+
 @Injectable()
 export class UsersService {
   constructor(private readonly prismaService: PrismaService, private readonly productService: ProductService) {}
