@@ -79,7 +79,7 @@ export class UsersService {
 
   // Получение услуг, на которые записан юзер
   async getMyPlans(user: User) {
-    return await this.prismaService.plan.findMany( {
+    const plans = await this.prismaService.plan.findMany( {
       select: {
         id: true,
         clientId: true,
@@ -90,6 +90,14 @@ export class UsersService {
         clientId: user.id
       },
     })
+    
+    // бля, это хуйня ебучая, гварды не нужны для одного условия
+    // plans.forEach(element => {
+    //   if (element.datetime > Date.now()) {
+    //     await this.prismaService.plan.delete(element)
+    //   }
+    // });
+    return plans;
   } 
 
   // Получение юзера по id

@@ -14,7 +14,7 @@ export class PlanService {
   // Создание записи на услугу
   async create(planData: CreatePlanDto) 
   {
-    const datetime = DatetimeCustomization.customDatetime(planData)
+    const datetime = new Date(Number(planData.year), Number(planData.month) - 1, Number(planData.day), Number(planData.hours), Number(planData.minutes));
     const newPlan = await this.prismaService.plan.create({
       data: {
         // ...planData,
@@ -23,6 +23,7 @@ export class PlanService {
         clientId: null
       }
     }); 
+    console.log(datetime.toLocaleString())
     return newPlan;
   }
 
