@@ -29,7 +29,7 @@ model Product {
  createdAt   DateTime  @default(now())
  updatedAt   DateTime  @updatedAt
  places      String    
- category    String
+//  category    String
  duration    String
  title       String?
  cost        String?
@@ -38,15 +38,24 @@ model Product {
  author      User      @relation(fields: [authorId], references: [id])
  isPublished Boolean   @default(false)
  productPlan Plan[]
+ categoryId  Int
+ category    Category  @relation(fields: [categoryId], references: [id])
 } 
 
 model Plan{
   id          Int       @id @default(autoincrement())
   clientId    Int?  
-  datetime    String
+  datetime    DateTime  // datetime    String
   idProduct   Int
   client      User?     @relation(fields: [clientId], references: [id])
   product     Product   @relation(fields: [idProduct], references: [id])  
+}
+
+model Category{
+  id           Int       @id @default(autoincrement())
+  label        String    @unique
+  description  String
+  products     Product[] 
 }
 
 enum Role {

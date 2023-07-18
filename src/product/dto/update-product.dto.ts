@@ -38,8 +38,7 @@ import { ApiProperty } from '@nestjs/swagger';
       example: 'Автомобили',
     })
     @IsNotEmpty()
-    @IsString()
-    category: string
+    categoryId: number
 
     @ApiProperty({
       description: 'Измененная длительность проведения услуги',
