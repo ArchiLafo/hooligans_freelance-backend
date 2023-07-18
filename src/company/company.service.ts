@@ -34,5 +34,49 @@ export class CompanyService {
     }
     throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND,
     );
+
+  }
+
+  async fire(idEmployee: number){
+    const fireUser = await this.prismaService.user.update(
+      {
+        where:
+        {
+          id: idEmployee
+        },
+        data:
+        {
+          idCompany: null,
+          role: Role.User
+        }
+      }
+    );
+    fireUser.password = undefined;
+    return fireUser;
+  }
+
+  async getAllEmployes(idCompany: number)
+  {
+    return await this.prismaService.company.findFirst(
+      {
+        where:
+        {
+          id: idCompany
+        },
+        select:
+        {
+          employee: 
+          {
+            select:
+            {
+              id: true,
+              name: true,
+              email: true,
+              role: true
+            }
+          }
+        }
+      }
+    )
   }
 }
