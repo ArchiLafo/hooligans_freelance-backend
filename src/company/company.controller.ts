@@ -17,4 +17,17 @@ export class CompanyController {
     console.log(employeeData)
     return await this.companyService.createEmployee(employeeData, id);
   }
+
+  @UseGuards(JwtAuthenticationGuard, CompanyLeaderGuard)
+  @Patch('fire_employee/:id')
+  async fire(@Param('id', ParseIntPipe) id: number, @Body() req)
+  {
+    return await this.companyService.fire(req.employeeId);
+  }
+
+  @Get(':id')
+  async getAllEmployes(@Param('id', ParseIntPipe) id: number)
+  {
+    return await this.companyService.getAllEmployes(id);
+  }
 }

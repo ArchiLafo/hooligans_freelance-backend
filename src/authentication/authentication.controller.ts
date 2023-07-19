@@ -1,4 +1,4 @@
-import { Body, Req, Controller, HttpCode, Post, UseGuards, Res, Get } from '@nestjs/common';
+import { Body, Req, Controller, HttpCode, Post, UseGuards, Res, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthenticationService } from './authentication.service';
 import RegisterDto from './dto/register.dto';
@@ -6,6 +6,8 @@ import RequestWithUser from './requestWithUser.interface';
 import { LocalAuthenticationGuard } from '../guard/localAuthentication.guard';
 import JwtAuthenticationGuard from '../guard/jwt-authentication.guard';
 import { ApiBody, ApiCookieAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
+import { use } from 'passport';
 
 @ApiCookieAuth()
 @ApiTags('Authentication')
@@ -58,7 +60,7 @@ export class AuthenticationController {
     return response.sendStatus(200);
   }
 
-  // Получение токена
+  // Получение информации о пользователе
   @UseGuards(JwtAuthenticationGuard)
   @Get()
   @ApiOperation({ summary: 'Аутентификация пользователя' })
@@ -66,9 +68,7 @@ export class AuthenticationController {
    description: 'Данные пользователя, без пароля'
   })
   async authenticate(@Req() request: RequestWithUser) {
-    console.log("Куки из ауфа: " + request.cookies.Authentication)
     const user = request.user; 
-    user.password = undefined; 
-    return user;
+    return await this.authenticationService.aboutUser(user);
   }
 }

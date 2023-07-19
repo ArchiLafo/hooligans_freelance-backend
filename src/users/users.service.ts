@@ -17,7 +17,7 @@ export class UsersService {
     {
       userRole = Role.Leader
     }
-    const newUser = await this.prismaService.user.create(
+    let newUser = await this.prismaService.user.create(
       {
         data: 
         {
@@ -29,10 +29,23 @@ export class UsersService {
     console.log(newUser)
     if (isCompany)
     {
-      await this.prismaService.company.create(
+      const company = await this.prismaService.company.create(
         {
           data: {
+            name: newUser.name,
             leaderId: newUser.id,
+          }
+        }
+      );
+      newUser = await this.prismaService.user.update(
+        {
+          where:
+          {
+            id: newUser.id
+          },
+          data:
+          {
+            idCompany: company.id
           }
         }
       )
@@ -43,7 +56,7 @@ export class UsersService {
   // Обновление юзера
   async updateProfile(updateData: UpdateUserDto, user: User) {
     if (user.name == updateData.name) {
-      throw new HttpException('You already have this name', HttpStatus.BAD_REQUEST)
+      throw new HttpException('У вас уже это имя', HttpStatus.BAD_REQUEST)
     }
     user = await this.prismaService.user.update({
       where: {
@@ -79,12 +92,12 @@ export class UsersService {
     const user = await this.prismaService.user.findUnique({
       where: {
         email,
-      },
+      }
     });
     if (user) {
       return user;
     }
-    throw new HttpException('Wrong email', HttpStatus.NOT_FOUND, );
+    throw new HttpException('Неправильный адрес электронной почты', HttpStatus.NOT_FOUND, );
   }
   
 
@@ -113,13 +126,28 @@ export class UsersService {
     })
     
     // бля, это хуйня ебучая, гварды не нужны для одного условия
-    // plans.forEach(element => {
-    //   if (element.datetime > Date.now()) {
-    //     await this.prismaService.plan.delete(element)
-    //   }
-    // });
+    plans.forEach(element => {
+      if (element.datetime.toLocaleString() < Date.now().toLocaleString()) {
+        console.log("z")
+        console.log(element.datetime.toLocaleString(), Date.now().toLocaleString())
+      }
+    });
     return plans;
   } 
+
+  // Получение юзера по id
+  async getInformation(id: number) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        company: true,
+      }
+    });
+    user.password = undefined;
+    return user;
+  }
 
   // Получение юзера по id
   async getById(id: number) {
@@ -133,7 +161,7 @@ export class UsersService {
       user.password = undefined;
       return user;
     }
-    throw new HttpException('User wit*h this id does not exist', HttpStatus.NOT_FOUND,
+    throw new HttpException('Пользователь с таким идентификатором не существует', HttpStatus.NOT_FOUND,
     );
   }
 }
