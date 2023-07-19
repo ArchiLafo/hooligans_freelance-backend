@@ -3,6 +3,8 @@ import CreateEmployeeDto from './dto/create-employee.dto';
 import { Role } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DataHashService } from 'src/data_hash/data_hash.service';
+import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import * as bcrypt from 'bcrypt';
 
 
 
@@ -30,16 +32,59 @@ export class CompanyService {
             ...employeeData,
             idCompany: id,
             role: Role.Employee
-          }
+          } 
         }
-      )
+      ) 
       //const hash = `${await bcrypt.hash(newEmployee.id.toString(),10)}.${await bcrypt.hash(newEmployee.email, 10)}`
-      //const hash = `${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
+      const hash = `http://localhost:3000/register/${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
       // console.log('Hash: ' + hash)
-      return newEmployee;
+      return hash;
     }
     else
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN)
+  }
+
+  // для этого гвард (чекни условие)
+  async registerEmployee(userData: UpdateEmployeeDto)
+  {
+    const split_hash: string[] = userData.hash.split('.')
+    const idUser: number = Number(await this.dataHashService.decryptData(split_hash[0]))
+    const emailUser: string = await this.dataHashService.decryptData(split_hash[1])
+    console.log(userData)
+    console.log("1" + idUser)
+    delete userData.hash;
+    const oldUser = await this.prismaService.user.findUnique(
+      {
+        where:
+        {
+          id: idUser
+        }
+      }
+    )
+    if (oldUser.name)
+    {
+      throw new HttpException("Этот пользователь уже зарегестрирован", HttpStatus.FORBIDDEN)
+    }
+    const user = await this.prismaService.user.update(
+    {
+      where:
+      {
+        id: idUser,
+      },
+      data:
+      {
+        ...userData,
+        password: await bcrypt.hash(userData.password, 10)
+      },
+      select:
+      {
+        id: true,
+        name: true,
+        email: true,
+        company: true
+      }
+    })
+    return user
   }
 
   async getById(id: number)
@@ -57,26 +102,31 @@ export class CompanyService {
     );
 
   }
-
+  
+  // для этого гвард (чекни условие)
   async DataForRegisterEmployee(hash: string)
   {
     const split_hash: string[] = hash.split('.')
     const idUser: number = Number(await this.dataHashService.decryptData(split_hash[0]))
     const emailUser: string = await this.dataHashService.decryptData(split_hash[1])
-    const userName = await this.prismaService.user.findUnique(
-      {
-        where:
-        {
-          email: emailUser
-        },
-        select:
-        {
-          name: true
-        }
-      })
-    if (userName == null)
+    const user = await this.prismaService.user.findUnique(
     {
-      return { "email": emailUser, "id": idUser }
+      where:
+      {
+        id: idUser
+      },
+      select:
+      {
+        id: true,
+        name: true,
+        email: true,
+        company: true
+      }
+    })
+    if ((!user.name) && ( user.email == emailUser ))
+    {
+      delete user.name
+      return user
     }
     else
     {
@@ -84,12 +134,6 @@ export class CompanyService {
     }
   }
 
-  // async getHashData(email: string, id: number)
-  // {
-    
-  //   console.log(hash)
-  //   return hash
-  // }
 
   async fire(idEmployee: number){
     const fireUser = await this.prismaService.user.update(
@@ -126,7 +170,8 @@ export class CompanyService {
               id: true,
               name: true,
               email: true,
-              role: true
+              role: true,
+              avatar: true
             }
           }
         }
