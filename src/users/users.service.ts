@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ProductService } from 'src/product/product.service';
 import SetAvatarDto from './dto/set-avatar.dto';
 import { Role, User } from '@prisma/client';
+import { PlanService } from 'src/plan/plan.service';
 
 @Injectable()
 export class UsersService {
@@ -125,14 +126,22 @@ export class UsersService {
       },
     })
     
-    // бля, это хуйня ебучая, гварды не нужны для одного условия
-    plans.forEach(element => {
-      if (element.datetime.toLocaleString() < Date.now().toLocaleString()) {
-        console.log("z")
-        console.log(element.datetime.toLocaleString(), Date.now().toLocaleString())
-      }
+    const currentDate = new Date();
+    plans.forEach(async element => {
+        if (element.datetime < currentDate) {
+            const deletePlan = await this.prismaService.plan.delete({where: {id: element.id}})
+            console.log("Удалена запись на время" + deletePlan)
+        }
     });
-    return plans;
+
+    const check = await this.prismaService.plan.findMany({
+        where: {
+        clientId: user.id
+    }});
+
+    // проверить
+    console.log(check);
+    return await plans;
   } 
 
   // Получение юзера по id
