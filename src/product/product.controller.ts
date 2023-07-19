@@ -8,12 +8,20 @@ import RequestWithUser from 'src/authentication/requestWithUser.interface';
 import AuthorGuard from 'src/guard/author.guard';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Plan } from '@prisma/client';
+import { MailService } from 'src/mail/mail.service';
 
 @ApiTags('Products')
 @Controller('products')
 export class ProductController 
 {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService, private readonly mailService: MailService) {}
+
+  // тест электронной почты
+  @Post('mail/test')
+  async sendEmail() {
+    await this.mailService.sendMail('slimeboy871@gmail.com', 'Тестовое письмо', 'Это тестовое письмо');
+  }
+
   @Get()
   @ApiOperation({ summary: "Получить все услуги" })
   @ApiResponse({

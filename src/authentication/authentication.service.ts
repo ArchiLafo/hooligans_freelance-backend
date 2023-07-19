@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import TokenPayload from './tokenPayload.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -14,7 +15,7 @@ export class AuthenticationService {
     private readonly prismaService: PrismaService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {}
  
   // Регистрация юзера
@@ -78,9 +79,5 @@ export class AuthenticationService {
   // Логаут пользователя
   public async getCookieForLogOut() {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
-  }
-
-  public async getCompany(id: number) {
-    return (await this.prismaService.user.findFirst({ where: { idCompany: id } })).name
   }
 }

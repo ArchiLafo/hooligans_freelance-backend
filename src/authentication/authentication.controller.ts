@@ -6,8 +6,6 @@ import RequestWithUser from './requestWithUser.interface';
 import { LocalAuthenticationGuard } from '../guard/localAuthentication.guard';
 import JwtAuthenticationGuard from '../guard/jwt-authentication.guard';
 import { ApiBody, ApiCookieAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Role } from '@prisma/client';
-import { use } from 'passport';
 
 @ApiCookieAuth()
 @ApiTags('Authentication')
@@ -72,7 +70,6 @@ export class AuthenticationController {
     const user = request.user;
     console.log(user);
     user.password = undefined; 
-    const companyName = await this.authenticationService.getCompany(user.idCompany);
     return user;
   }
 }
