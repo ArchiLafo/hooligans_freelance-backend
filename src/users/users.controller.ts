@@ -11,6 +11,7 @@ import { Customization } from 'src/files/files.configure';
 import * as fs from 'fs';
 import { ApiBody, ApiConsumes, ApiExcludeEndpoint, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Plan } from '@prisma/client';
+import TimePlanGuard from 'src/guard/time-plan.guard';
 
 @ApiTags('Users')
 @Controller('users')
