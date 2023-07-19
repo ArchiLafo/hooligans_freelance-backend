@@ -6,6 +6,8 @@ import { DataHashService } from 'src/data_hash/data_hash.service';
 
 
 
+
+
 @Injectable()
 export class CompanyService {
   constructor(private readonly prismaService: PrismaService, private readonly dataHashService: DataHashService){}
