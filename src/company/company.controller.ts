@@ -4,6 +4,7 @@ import CreateEmployeeDto from './dto/create-employee.dto';
 import JwtAuthenticationGuard from 'src/guard/jwt-authentication.guard';
 import { User } from '@prisma/client';
 import CompanyLeaderGuard from 'src/guard/company-leader.guard';
+import { UpdateEmployeeDto } from './dto/update-employee.dto';
 
 
 @Controller('company')
@@ -16,6 +17,12 @@ export class CompanyController {
   {
     console.log(employeeData)
     return await this.companyService.createEmployee(employeeData, id);
+  }
+
+  @Patch('registerEmployee')
+  async registerEmployee(@Body() employeeData: UpdateEmployeeDto)
+  {
+    return await this.companyService.registerEmployee(employeeData)
   }
 
   @Get('infoEmployee')

@@ -3,6 +3,8 @@ import CreateEmployeeDto from './dto/create-employee.dto';
 import { Role } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DataHashService } from 'src/data_hash/data_hash.service';
+import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import * as bcrypt from 'bcrypt';
 
 
 
@@ -32,9 +34,9 @@ export class CompanyService {
             role: Role.Employee
           } 
         }
-      )
+      ) 
       //const hash = `${await bcrypt.hash(newEmployee.id.toString(),10)}.${await bcrypt.hash(newEmployee.email, 10)}`
-      const hash = `${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
+      const hash = `http://localhost:3000/register/${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
       // console.log('Hash: ' + hash)
       return hash;
     }
@@ -42,28 +44,47 @@ export class CompanyService {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN)
   }
 
-  async getInfoEmployee(hash: string)
+  // для этого гвард (чекни условие)
+  async registerEmployee(userData: UpdateEmployeeDto)
   {
-    const hash_split: string[] = hash.split('.')
-    const idUser: number = Number(await this.dataHashService.decryptData(hash[0]))
-    const email: string = await this.dataHashService.decryptData(hash[1])
-    const user = await this.prismaService.user.findUnique(
+    const split_hash: string[] = userData.hash.split('.')
+    const idUser: number = Number(await this.dataHashService.decryptData(split_hash[0]))
+    const emailUser: string = await this.dataHashService.decryptData(split_hash[1])
+    console.log(userData)
+    console.log("1" + idUser)
+    delete userData.hash;
+    const oldUser = await this.prismaService.user.findUnique(
       {
         where:
         {
           id: idUser
         }
       }
-    );
-    //user.password = undefined;
-    if (!user.name)
+    )
+    if (oldUser.name)
     {
-      return user;
+      throw new HttpException("Этот пользователь уже зарегестрирован", HttpStatus.FORBIDDEN)
     }
-    else
+    const user = await this.prismaService.user.update(
     {
-      throw new HttpException("Не найден такой работник", HttpStatus.NOT_FOUND)
-    }
+      where:
+      {
+        id: idUser,
+      },
+      data:
+      {
+        ...userData,
+        password: await bcrypt.hash(userData.password, 10)
+      },
+      select:
+      {
+        id: true,
+        name: true,
+        email: true,
+        company: true
+      }
+    })
+    return user
   }
 
   async getById(id: number)
@@ -81,29 +102,30 @@ export class CompanyService {
     );
 
   }
-
+  
+  // для этого гвард (чекни условие)
   async DataForRegisterEmployee(hash: string)
   {
     const split_hash: string[] = hash.split('.')
     const idUser: number = Number(await this.dataHashService.decryptData(split_hash[0]))
     const emailUser: string = await this.dataHashService.decryptData(split_hash[1])
-    console.log(idUser)
     const user = await this.prismaService.user.findUnique(
-      {
-        where:
-        {
-          id: idUser
-        },
-        select:
-        {
-          id: true,
-          name: true,
-          email: true,
-          idCompany: true
-        }
-      })
-    if (!user.name)
     {
+      where:
+      {
+        id: idUser
+      },
+      select:
+      {
+        id: true,
+        name: true,
+        email: true,
+        company: true
+      }
+    })
+    if ((!user.name) && ( user.email == emailUser ))
+    {
+      delete user.name
       return user
     }
     else
@@ -148,7 +170,8 @@ export class CompanyService {
               id: true,
               name: true,
               email: true,
-              role: true
+              role: true,
+              avatar: true
             }
           }
         }
