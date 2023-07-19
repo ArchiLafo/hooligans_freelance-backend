@@ -4,6 +4,7 @@ import CreateEmployeeDto from './dto/create-employee.dto';
 import JwtAuthenticationGuard from 'src/guard/jwt-authentication.guard';
 import { User } from '@prisma/client';
 import CompanyLeaderGuard from 'src/guard/company-leader.guard';
+import { UpdateEmployeeDto } from './dto/update-employee.dto';
 
 
 @Controller('company')
@@ -18,6 +19,18 @@ export class CompanyController {
     return await this.companyService.createEmployee(employeeData, id);
   }
 
+  @Patch('registerEmployee')
+  async registerEmployee(@Body() employeeData: UpdateEmployeeDto)
+  {
+    return await this.companyService.registerEmployee(employeeData)
+  }
+
+  @Get('infoEmployee')
+  async getInfoEmployee(@Body() data)
+  {
+    return await this.companyService.DataForRegisterEmployee(data.hash);
+  }
+
   @UseGuards(JwtAuthenticationGuard, CompanyLeaderGuard)
   @Patch('fire_employee/:id')
   async fire(@Param('id', ParseIntPipe) id: number, @Body() req)
@@ -25,16 +38,10 @@ export class CompanyController {
     return await this.companyService.fire(req.employeeId);
   }
 
-  @Get(':id')
+  @Get('allEmployee/:id')
   async getAllEmployes(@Param('id', ParseIntPipe) id: number)
   {
     return await this.companyService.getAllEmployes(id);
-  }
-
-  @Get('getInfoEmployee')
-  async DataForRegisterEmployee(@Body() data)
-  {
-    return await this.companyService.DataForRegisterEmployee(data.hash)
   }
   // @Get('registerEmployee')
   // async getHashData(@Body() dataHash)

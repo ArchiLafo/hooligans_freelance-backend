@@ -19,6 +19,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Company" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
     "leaderId" INTEGER NOT NULL,
     "about" TEXT DEFAULT 'Нет описания',
 
@@ -39,6 +40,7 @@ CREATE TABLE "Product" (
     "authorId" INTEGER NOT NULL,
     "isPublished" BOOLEAN NOT NULL DEFAULT false,
     "categoryId" INTEGER NOT NULL,
+    "isOnline" BOOLEAN DEFAULT false,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
