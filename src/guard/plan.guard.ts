@@ -27,25 +27,24 @@ export default class PlanGuard implements CanActivate {
         const planId = Number(params.id);
         const checkedPlan = await this.planService.getById(planId)
         console.log("checkedPlan: " + checkedPlan.idProduct)
+        const userId = user.id;
+        const checkedUser = await this.usersService.getById(userId)
+        console.log("checkedUser: " + checkedUser.id)
+        const checkedProduct = await this.productService.getById(checkedPlan.idProduct)
+        console.log("checkedProduct: " + checkedProduct.id)
 
         const currentDate = new Date();
         if (checkedPlan.datetime < currentDate) {
             const deletePlan = await this.prismaService.plan.delete({where: {id: planId}})
             console.log("Удалена запись на время" + deletePlan)
+        }
 
         // либо ты админ
         if (user?.role.includes(Role.Admin)) {
             return true;
         }
 
-        const userId = user.id;
-
-        const checkedUser = await this.usersService.getById(userId)
-        console.log("checkedUser: " + checkedUser.id)
-        const checkedProduct = await this.productService.getById(checkedPlan.idProduct)
-
         // либо ты автор
         return (checkedUser.id === checkedProduct.authorId);    
     }
-}
 }
