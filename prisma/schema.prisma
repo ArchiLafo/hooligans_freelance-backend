@@ -27,6 +27,7 @@ model User {
 
 model Company{
   id        Int       @id @default(autoincrement())
+  name      String
   leaderId  Int       @unique //Чтобы юзер не имел несколько компаний
   about     String?   @default("Нет описания")
   employee  User[]

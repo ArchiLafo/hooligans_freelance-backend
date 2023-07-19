@@ -72,7 +72,7 @@ export class AuthenticationController {
     const user = request.user;
     console.log(user);
     user.password = undefined; 
-    const company = await this.authenticationService.getCompany(user.idCompany);
-    return {user, company};
+    const companyName = await this.authenticationService.getCompany(user.idCompany);
+    return user;
   }
 }

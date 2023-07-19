@@ -79,7 +79,6 @@ export class UsersController {
   })
   async getMyPlans(@Req() request: RequestWithUser) {
     const user = request.user;
-    console.log(user);
     return await this.usersService.getMyPlans(user);
   }
 
@@ -120,6 +119,6 @@ export class UsersController {
   })
   @ApiResponse({ description: 'Пользователь', })
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.getById(Number(id));
+    return this.usersService.getInformation(Number(id));
   }
 }

@@ -32,6 +32,7 @@ export class UsersService {
       const company = await this.prismaService.company.create(
         {
           data: {
+            name: newUser.name,
             leaderId: newUser.id,
           }
         }
@@ -125,13 +126,28 @@ export class UsersService {
     })
     
     // бля, это хуйня ебучая, гварды не нужны для одного условия
-    // plans.forEach(element => {
-    //   if (element.datetime > Date.now()) {
-    //     await this.prismaService.plan.delete(element)
-    //   }
-    // });
+    plans.forEach(element => {
+      if (element.datetime.toLocaleString() < Date.now().toLocaleString()) {
+        console.log("z")
+        console.log(element.datetime.toLocaleString(), Date.now().toLocaleString())
+      }
+    });
     return plans;
   } 
+
+  // Получение юзера по id
+  async getInformation(id: number) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        company: true,
+      }
+    });
+    user.password = undefined;
+    return user;
+  }
 
   // Получение юзера по id
   async getById(id: number) {
