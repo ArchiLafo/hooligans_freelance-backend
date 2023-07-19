@@ -42,7 +42,7 @@ export class AuthenticationController {
     request.res.set('Set-Cookie', cookie)
     user.password = undefined
     return request.res.send(user) 
-  }
+  }//Для эмплоера придумать новый логин
 
   // Выход из профиля
   @UseGuards(JwtAuthenticationGuard)

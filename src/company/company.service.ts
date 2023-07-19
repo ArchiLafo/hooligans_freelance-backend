@@ -32,9 +32,9 @@ export class CompanyService {
         }
       )
       //const hash = `${await bcrypt.hash(newEmployee.id.toString(),10)}.${await bcrypt.hash(newEmployee.email, 10)}`
-      const hash = `${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
-      console.log('Hash: ' + hash)
-      return hash;
+      //const hash = `${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
+      // console.log('Hash: ' + hash)
+      return newEmployee;
     }
     else
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN)
@@ -54,6 +54,32 @@ export class CompanyService {
     throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND,
     );
 
+  }
+
+  async DataForRegisterEmployee(hash: string)
+  {
+    const split_hash: string[] = hash.split('.')
+    const idUser: number = Number(await this.dataHashService.decryptData(split_hash[0]))
+    const emailUser: string = await this.dataHashService.decryptData(split_hash[1])
+    const userName = await this.prismaService.user.findUnique(
+      {
+        where:
+        {
+          email: emailUser
+        },
+        select:
+        {
+          name: true
+        }
+      })
+    if (userName == null)
+    {
+      return { "email": emailUser, "id": idUser }
+    }
+    else
+    {
+      throw new HttpException("Данный пользователь уже активирован", HttpStatus.FORBIDDEN)
+    }
   }
 
   // async getHashData(email: string, id: number)
