@@ -30,4 +30,10 @@ export class CompanyController {
   {
     return await this.companyService.getAllEmployes(id);
   }
+
+  // @Get('registerEmployee')
+  // async getHashData(@Body() dataHash)
+  // {
+  //   return 
+  // }
 }

@@ -19,8 +19,6 @@ export default class PlanGuard implements CanActivate {
             return false;
         }
 
-        console.log(params)
-        console.log("user: " + user + "plan: " + params)
         if (!user || !params) {
             return false;
         }
@@ -33,11 +31,8 @@ export default class PlanGuard implements CanActivate {
         const planId = Number(params.id);
 
         const checkedUser = await this.usersService.getById(userId)
-        console.log("checkedUser: " + checkedUser.id)
         const checkedPlan = await this.planService.getById(planId)
-        console.log("checkedPlan: " + checkedPlan.idProduct)
         const checkedProduct = await this.productService.getById(checkedPlan.idProduct)
-        console.log("checkedProduct: " + checkedProduct.authorId)
 
         // либо ты автор
         return (checkedUser.id === checkedProduct.authorId);    
