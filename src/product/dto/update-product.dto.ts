@@ -47,6 +47,12 @@ import { ApiProperty } from '@nestjs/swagger';
     @IsNotEmpty()
     @IsString()
     duration: string
+
+    @ApiProperty({
+      description: 'Формат услуги',
+      example: 'Онлайн',
+    })
+    format: string
   }
   
   export default UpdateProductDto;

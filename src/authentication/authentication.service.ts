@@ -6,11 +6,12 @@ import PostgresErrorCode from '../database/postgresErrorCode.enum';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import TokenPayload from './tokenPayload.interface';
-import { Role } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
+    private readonly prismaService: PrismaService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
@@ -77,5 +78,9 @@ export class AuthenticationService {
   // Логаут пользователя
   public async getCookieForLogOut() {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+  }
+
+  public async getCompany(id: number) {
+    return (await this.prismaService.user.findFirst({ where: { idCompany: id } })).name
   }
 }

@@ -20,6 +20,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Company" (
     "id" SERIAL NOT NULL,
     "leaderId" INTEGER NOT NULL,
+    "about" TEXT DEFAULT 'Нет описания',
 
     CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
 );
@@ -55,6 +56,7 @@ CREATE TABLE "Plan" (
 -- CreateTable
 CREATE TABLE "Category" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
     "label" TEXT NOT NULL,
     "description" TEXT NOT NULL,
 

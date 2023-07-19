@@ -99,7 +99,7 @@ async function main() {
       places: "ул. Киренского, д. 26",
       categoryId: 7,
       authorId: 1,
-      duration: "15 минут"
+      duration: "15 минут",
     },
   }); 
 
@@ -113,7 +113,7 @@ async function main() {
       places: "ул. Академика Зелинского, д. 6",
       categoryId: 7,
       authorId: 1,
-      duration: "2 часа"
+      duration: "2 часа",
     },
   }); 
 }

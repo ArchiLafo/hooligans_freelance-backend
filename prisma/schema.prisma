@@ -28,6 +28,7 @@ model User {
 model Company{
   id        Int       @id @default(autoincrement())
   leaderId  Int       @unique //Чтобы юзер не имел несколько компаний
+  about     String?   @default("Нет описания")
   employee  User[]
 }
 
@@ -48,6 +49,7 @@ model Product {
  productPlan Plan[]
  categoryId  Int
  category    Category  @relation(fields: [categoryId], references: [id])
+ isOnline    Boolean?  @default(false)
 } 
 
 model Plan{

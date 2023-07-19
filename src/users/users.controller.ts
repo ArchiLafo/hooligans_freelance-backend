@@ -110,7 +110,7 @@ export class UsersController {
   }
 
   // Получение юзера по id
-  @Get(':id')
+  @Get('information/:id')
   @ApiOperation({ summary: "Получить пользователя по ID" })
   @ApiParam({
     name: 'id',
