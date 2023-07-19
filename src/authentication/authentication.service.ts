@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import TokenPayload from './tokenPayload.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { MailService } from 'src/mail/mail.service';
 import { User } from '@prisma/client';
 
 @Injectable()
@@ -15,7 +16,7 @@ export class AuthenticationService {
     private readonly prismaService: PrismaService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {}
  
   // Регистрация юзера

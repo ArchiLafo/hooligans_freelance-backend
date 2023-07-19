@@ -17,6 +17,7 @@ import { FilesController } from './files/files.controller';
 import { PlanModule } from './plan/plan.module';
 import { CompanyModule } from './company/company.module';
 import { CategoryModule } from './category/category.module';
+import { MailModule } from './mail/mail.module';
 import { DataHashModule } from './data_hash/data_hash.module';
 
 @Module({
@@ -25,6 +26,7 @@ imports: [
     UsersModule,
     AuthenticationModule,
     ConfigModule.forRoot({
+      isGlobal: true,
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION_TIME: Joi.string().required(),
@@ -35,6 +37,7 @@ imports: [
     PlanModule,
     CompanyModule,
     CategoryModule,
+    MailModule,
     DataHashModule,
   ],
   controllers: [AppController, ProductController, ModerationController, FilesController],

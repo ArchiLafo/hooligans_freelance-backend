@@ -6,8 +6,6 @@ import RequestWithUser from './requestWithUser.interface';
 import { LocalAuthenticationGuard } from '../guard/localAuthentication.guard';
 import JwtAuthenticationGuard from '../guard/jwt-authentication.guard';
 import { ApiBody, ApiCookieAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Role } from '@prisma/client';
-import { use } from 'passport';
 
 @ApiCookieAuth()
 @ApiTags('Authentication')
@@ -66,7 +64,10 @@ export class AuthenticationController {
    description: 'Данные пользователя, без пароля'
   })
   async authenticate(@Req() request: RequestWithUser) {
-    const user = request.user; 
+    console.log("Куки из ауфа: " + request.cookies.Authentication)
+    const user = request.user;
+    console.log(user);
+    user.password = undefined; 
     return await this.authenticationService.aboutUser(user);
   }
 }
