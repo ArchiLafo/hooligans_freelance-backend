@@ -60,7 +60,7 @@ export class AuthenticationController {
     return response.sendStatus(200);
   }
 
-  // Получение токена
+  // Получение информации о пользователе
   @UseGuards(JwtAuthenticationGuard)
   @Get()
   @ApiOperation({ summary: 'Аутентификация пользователя' })

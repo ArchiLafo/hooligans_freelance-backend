@@ -56,6 +56,25 @@ export class AuthenticationService {
       );
     }
   }
+
+  // Получение информации о пользователе
+  async aboutUser(user: User) {
+    user.password = undefined; 
+    if (user.idCompany)
+    {
+      user["company"] = await this.prismaService.company.findUnique(
+        {
+          where:
+          {
+            id: user.idCompany
+          }
+        }
+      )
+    }
+    else
+      user["company"] = null
+    return user;
+  }
   
   // Верификация пароля
   private async verifyPassword(plainTextPassword: string, hashedPassword: string) 
@@ -79,23 +98,5 @@ export class AuthenticationService {
   // Логаут пользователя
   public async getCookieForLogOut() {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
-  }
-
-  async aboutUser(user: User) {
-    user.password = undefined; 
-    if (user.idCompany)
-    {
-      user["company"] = await this.prismaService.company.findUnique(
-        {
-          where:
-          {
-            id: user.idCompany
-          }
-        }
-      )
-    }
-    else
-      user["company"] = null
-    return user;
   }
 }
