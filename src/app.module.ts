@@ -17,6 +17,7 @@ import { FilesController } from './files/files.controller';
 import { PlanModule } from './plan/plan.module';
 import { CompanyModule } from './company/company.module';
 import { CategoryModule } from './category/category.module';
+import { DataHashModule } from './data_hash/data_hash.module';
 
 @Module({
 imports: [
@@ -34,6 +35,7 @@ imports: [
     PlanModule,
     CompanyModule,
     CategoryModule,
+    DataHashModule,
   ],
   controllers: [AppController, ProductController, ModerationController, FilesController],
   providers: [AppService, ModerationService, FilesService],

@@ -37,14 +37,12 @@ export class AuthenticationController {
     description: 'Данные пользователя, без пароля'
   })
   async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
-    console.log("Логин реквест: " + request.user.email)
     const { user } = request
     const cookie = await this.authenticationService.getCookieWithJwtToken(user.id)
-    console.log("Насрал куки в ваши руки: " + cookie)
     request.res.set('Set-Cookie', cookie)
     user.password = undefined
     return request.res.send(user) 
-  }
+  }//Для эмплоера придумать новый логин
 
   // Выход из профиля
   @UseGuards(JwtAuthenticationGuard)
@@ -60,7 +58,7 @@ export class AuthenticationController {
     return response.sendStatus(200);
   }
 
-  // Получение токена
+  // Получение информации о пользователе
   @UseGuards(JwtAuthenticationGuard)
   @Get()
   @ApiOperation({ summary: 'Аутентификация пользователя' })
@@ -68,11 +66,7 @@ export class AuthenticationController {
    description: 'Данные пользователя, без пароля'
   })
   async authenticate(@Req() request: RequestWithUser) {
-    console.log("Куки из ауфа: " + request.cookies.Authentication)
-    const user = request.user;
-    console.log(user);
-    user.password = undefined; 
-    const companyName = await this.authenticationService.getCompany(user.idCompany);
-    return user;
+    const user = request.user; 
+    return await this.authenticationService.aboutUser(user);
   }
 }
