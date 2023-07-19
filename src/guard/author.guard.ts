@@ -28,9 +28,7 @@ export default class AuthorGuard implements CanActivate {
         const userId = user.id;
         const productId = Number(params.id);
         const checkedUser = await this.usersService.getById(userId)
-        console.log("checkedUser: " + userId)
         const checkedProduct = await this.productService.getById(productId)
-        console.log("checkedProduct: " + productId)
 
         // либо ты автор
         return (checkedUser.id === checkedProduct.authorId);    
