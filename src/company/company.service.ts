@@ -30,16 +30,40 @@ export class CompanyService {
             ...employeeData,
             idCompany: id,
             role: Role.Employee
-          }
+          } 
         }
       )
       //const hash = `${await bcrypt.hash(newEmployee.id.toString(),10)}.${await bcrypt.hash(newEmployee.email, 10)}`
-      //const hash = `${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
+      const hash = `${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
       // console.log('Hash: ' + hash)
-      return newEmployee;
+      return hash;
     }
     else
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN)
+  }
+
+  async getInfoEmployee(hash: string)
+  {
+    const hash_split: string[] = hash.split('.')
+    const idUser: number = Number(await this.dataHashService.decryptData(hash[0]))
+    const email: string = await this.dataHashService.decryptData(hash[1])
+    const user = await this.prismaService.user.findUnique(
+      {
+        where:
+        {
+          id: idUser
+        }
+      }
+    );
+    //user.password = undefined;
+    if (!user.name)
+    {
+      return user;
+    }
+    else
+    {
+      throw new HttpException("Не найден такой работник", HttpStatus.NOT_FOUND)
+    }
   }
 
   async getById(id: number)
@@ -63,20 +87,24 @@ export class CompanyService {
     const split_hash: string[] = hash.split('.')
     const idUser: number = Number(await this.dataHashService.decryptData(split_hash[0]))
     const emailUser: string = await this.dataHashService.decryptData(split_hash[1])
-    const userName = await this.prismaService.user.findUnique(
+    console.log(idUser)
+    const user = await this.prismaService.user.findUnique(
       {
         where:
         {
-          email: emailUser
+          id: idUser
         },
         select:
         {
-          name: true
+          id: true,
+          name: true,
+          email: true,
+          idCompany: true
         }
       })
-    if (userName == null)
+    if (!user.name)
     {
-      return { "email": emailUser, "id": idUser }
+      return user
     }
     else
     {
@@ -84,12 +112,6 @@ export class CompanyService {
     }
   }
 
-  // async getHashData(email: string, id: number)
-  // {
-    
-  //   console.log(hash)
-  //   return hash
-  // }
 
   async fire(idEmployee: number){
     const fireUser = await this.prismaService.user.update(

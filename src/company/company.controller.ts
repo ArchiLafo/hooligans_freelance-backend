@@ -18,6 +18,12 @@ export class CompanyController {
     return await this.companyService.createEmployee(employeeData, id);
   }
 
+  @Get('infoEmployee')
+  async getInfoEmployee(@Body() data)
+  {
+    return await this.companyService.DataForRegisterEmployee(data.hash);
+  }
+
   @UseGuards(JwtAuthenticationGuard, CompanyLeaderGuard)
   @Patch('fire_employee/:id')
   async fire(@Param('id', ParseIntPipe) id: number, @Body() req)
@@ -25,19 +31,14 @@ export class CompanyController {
     return await this.companyService.fire(req.employeeId);
   }
 
-  @Get(':id')
+  @Get('allEmployee/:id')
   async getAllEmployes(@Param('id', ParseIntPipe) id: number)
   {
     return await this.companyService.getAllEmployes(id);
-  }
-
-  @Get('getInfoEmployee')
-  async DataForRegisterEmployee(@Body() data)
-  {
-    return await this.companyService.DataForRegisterEmployee(data.hash)
   }
   // @Get('registerEmployee')
   // async getHashData(@Body() dataHash)
   // {
   //   return 
   // }
+}
