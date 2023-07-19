@@ -64,15 +64,10 @@ export class AuthenticationController {
    description: 'Данные пользователя, без пароля'
   })
   async authenticate(@Req() request: RequestWithUser) {
-<<<<<<< HEAD
     console.log("Куки из ауфа: " + request.cookies.Authentication)
     const user = request.user;
     console.log(user);
     user.password = undefined; 
-    return user;
-=======
-    const user = request.user; 
     return await this.authenticationService.aboutUser(user);
->>>>>>> 2b4712f17f03728f28460814092014534efc5366
   }
 }

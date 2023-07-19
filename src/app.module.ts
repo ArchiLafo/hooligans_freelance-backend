@@ -17,11 +17,8 @@ import { FilesController } from './files/files.controller';
 import { PlanModule } from './plan/plan.module';
 import { CompanyModule } from './company/company.module';
 import { CategoryModule } from './category/category.module';
-<<<<<<< HEAD
 import { MailModule } from './mail/mail.module';
-=======
 import { DataHashModule } from './data_hash/data_hash.module';
->>>>>>> 2b4712f17f03728f28460814092014534efc5366
 
 @Module({
 imports: [
@@ -40,11 +37,8 @@ imports: [
     PlanModule,
     CompanyModule,
     CategoryModule,
-<<<<<<< HEAD
     MailModule,
-=======
     DataHashModule,
->>>>>>> 2b4712f17f03728f28460814092014534efc5366
   ],
   controllers: [AppController, ProductController, ModerationController, FilesController],
   providers: [AppService, ModerationService, FilesService],
