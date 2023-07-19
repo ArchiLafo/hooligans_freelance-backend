@@ -3,6 +3,8 @@ import CreateEmployeeDto from './dto/create-employee.dto';
 import { Role } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
+
+
 @Injectable()
 export class CompanyService {
   constructor(private readonly prismaService: PrismaService){}
