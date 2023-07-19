@@ -5,14 +5,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { DataHashService } from 'src/data_hash/data_hash.service';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import * as bcrypt from 'bcrypt';
-
-
-
+import { MailService } from 'src/mail/mail.service';
 
 
 @Injectable()
 export class CompanyService {
-  constructor(private readonly prismaService: PrismaService, private readonly dataHashService: DataHashService){}
+  constructor(private readonly prismaService: PrismaService, private readonly dataHashService: DataHashService, private readonly mailService: MailService, ){}
   async createEmployee(employeeData: CreateEmployeeDto, id: number)
   {
     const oldEmployee = await this.prismaService.user.findUnique(
@@ -36,8 +34,9 @@ export class CompanyService {
         }
       ) 
       //const hash = `${await bcrypt.hash(newEmployee.id.toString(),10)}.${await bcrypt.hash(newEmployee.email, 10)}`
-      const hash = `http://localhost:3000/register/${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
+      const hash = `http://localhost:8081/register/${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
       // console.log('Hash: ' + hash)
+      await this.mailService.sendMail(newEmployee.email, 'Регистрация в компании', ('Ссылка для регистрации: \n' + hash));
       return hash;
     }
     else
