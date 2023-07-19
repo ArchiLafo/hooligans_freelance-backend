@@ -7,7 +7,11 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import TokenPayload from './tokenPayload.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
+<<<<<<< HEAD
 import { MailService } from 'src/mail/mail.service';
+=======
+import { User } from '@prisma/client';
+>>>>>>> 2b4712f17f03728f28460814092014534efc5366
 
 @Injectable()
 export class AuthenticationService {
@@ -55,6 +59,25 @@ export class AuthenticationService {
       throw new HttpException('Неверные учетные данные', HttpStatus.BAD_REQUEST,
       );
     }
+  }
+
+  // Получение информации о пользователе
+  async aboutUser(user: User) {
+    user.password = undefined; 
+    if (user.idCompany)
+    {
+      user["company"] = await this.prismaService.company.findUnique(
+        {
+          where:
+          {
+            id: user.idCompany
+          }
+        }
+      )
+    }
+    else
+      user["company"] = null
+    return user;
   }
   
   // Верификация пароля
