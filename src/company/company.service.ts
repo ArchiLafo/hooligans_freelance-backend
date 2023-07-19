@@ -59,7 +59,7 @@ export class CompanyService {
 
   async getAllEmployes(idCompany: number)
   {
-    return await this.prismaService.company.findFirst(
+    return await this.prismaService.company.findUnique(
       {
         where:
         {

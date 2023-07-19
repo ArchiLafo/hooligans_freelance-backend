@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import TokenPayload from './tokenPayload.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthenticationService {
@@ -80,7 +81,21 @@ export class AuthenticationService {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
   }
 
-  public async getCompany(id: number) {
-    return (await this.prismaService.user.findFirst({ where: { idCompany: id } })).name
+  async aboutUser(user: User) {
+    user.password = undefined; 
+    if (user.idCompany)
+    {
+      user["company"] = await this.prismaService.company.findUnique(
+        {
+          where:
+          {
+            id: user.idCompany
+          }
+        }
+      )
+    }
+    else
+      user["company"] = null
+    return user;
   }
 }
