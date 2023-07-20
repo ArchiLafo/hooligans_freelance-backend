@@ -7,11 +7,13 @@ const secretKey = 'httpholigans';
 export class DataHashService {
 
   async encryptData(data: string): Promise<string> {
-    const ciphertext = await crypto.AES.encrypt(data, secretKey).toString();
+    let ciphertext: string = await crypto.AES.encrypt(data, secretKey).toString();
+    ciphertext = await ciphertext.replace('+', '$')
     return ciphertext;
   }
   async decryptData(encryptedData: string): Promise<string> {
     try{
+      encryptedData = await encryptedData.replace('$', '+')
       const bytes = await crypto.AES.decrypt(encryptedData, secretKey);
       const originalData = await bytes.toString(crypto.enc.Utf8);
       return originalData;
