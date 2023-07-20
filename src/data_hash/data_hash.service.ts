@@ -18,7 +18,7 @@ export class DataHashService {
     }
     catch
     {
-      throw new HttpException("Ошибка запроса", HttpStatus.FORBIDDEN)
+      throw new HttpException("Ошибка запроса", HttpStatus.BAD_REQUEST)
     }
   }
 
