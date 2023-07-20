@@ -25,7 +25,7 @@ export class CompanyController {
     return await this.companyService.registerEmployee(employeeData)
   }
 
-  @Get('infoEmployee')
+  @Post('infoEmployee')
   async getInfoEmployee(@Body() data)
   {
     return await this.companyService.DataForRegisterEmployee(data.hash);
