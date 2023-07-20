@@ -13,28 +13,21 @@ import fs from 'fs';
 @Injectable()
 export class CompanyService {
   constructor(private readonly prismaService: PrismaService, private readonly dataHashService: DataHashService, private readonly mailService: MailService, ){}
-  async createEmployee(employeeData: CreateEmployeeDto, id: number)
-  {
-    const oldEmployee = await this.prismaService.user.findUnique(
-      {
-        where:
-        {
-          email: employeeData.email
-        }
+  async createEmployee(employeeData: CreateEmployeeDto, id: number) {
+    const oldEmployee = await this.prismaService.user.findUnique( {
+      where: {
+        email: employeeData.email
       }
-    )
-    if(!oldEmployee)
-    {
-      const newEmployee = await this.prismaService.user.create(
-        {
-          data: 
-          {
-            ...employeeData,
-            idCompany: id,
-            role: Role.Employee
-          } 
-        }
-      )
+    })
+
+    if(!oldEmployee) {
+      const newEmployee = await this.prismaService.user.create( {
+        data: {
+          ...employeeData,
+          idCompany: id,
+          role: Role.Employee
+        } 
+      })
 
       // // удаляем через день, чтобы не втыкал
       // const delayInHours = 24;
@@ -194,39 +187,30 @@ export class CompanyService {
   }
 
   // для этого гвард (чекни условие)
-  async registerEmployee(userData: UpdateEmployeeDto)
-  {
+  async registerEmployee(userData: UpdateEmployeeDto) {
     const split_hash: string[] = userData.hash.split('.')
     const idUser: number = Number(await this.dataHashService.decryptData(split_hash[0]))
     const emailUser: string = await this.dataHashService.decryptData(split_hash[1])
     console.log(userData)
     console.log("1" + idUser)
     delete userData.hash;
-    const oldUser = await this.prismaService.user.findUnique(
-      {
-        where:
-        {
-          id: idUser
-        }
+    const oldUser = await this.prismaService.user.findUnique( {
+      where: {
+        id: idUser
       }
-    )
-    if (oldUser.name)
-    {
+    })
+    if (oldUser.name) {
       throw new HttpException("Этот пользователь уже зарегистрирован", HttpStatus.BAD_REQUEST)
     }
-    const user = await this.prismaService.user.update(
-    {
-      where:
-      {
+    const user = await this.prismaService.user.update( {
+      where: {
         id: idUser,
       },
-      data:
-      {
+      data: {
         ...userData,
         password: await bcrypt.hash(userData.password, 10)
       },
-      select:
-      {
+      select: {
         id: true,
         name: true,
         email: true,
@@ -236,68 +220,55 @@ export class CompanyService {
     return user;
   }
 
-  async getById(id: number)
-  {
+  async getById(id: number) {
     const company = await this.prismaService.company.findUnique({
       where: {
         id: id, 
       },
     });
-    if(company)
-    {
+    if(company) {
       return company
     }
     throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND,
     );
-
   }
   
   // для этого гвард (чекни условие)
-  async DataForRegisterEmployee(hash: string)
-  {
+  async DataForRegisterEmployee(hash: string) {
     const split_hash: string[] = hash.split('.')
     const idUser: number = Number(await this.dataHashService.decryptData(split_hash[0]))
     const emailUser: string = await this.dataHashService.decryptData(split_hash[1])
     console.log('email:' + emailUser)
     console.log('idUser:' + idUser)
-    if ((!idUser) || (!emailUser))
-    {
+    if ((!idUser) || (!emailUser)) {
       throw new HttpException("Ошибка запроса", HttpStatus.BAD_REQUEST)
     }
-    const user = await this.prismaService.user.findUnique(
-    {
-      where:
-      {
+    const user = await this.prismaService.user.findUnique( {
+      where: {
         id: idUser
       },
-      select:
-      {
+      select: {
         id: true,
         name: true,
         email: true,
         company: true
       }
     })
-    if ((!user.name) && ( user.email == emailUser ))
-    {
+    if ((!user.name) && ( user.email == emailUser )) {
       delete user.name
       return user
     }
-    else
-    {
+    else {
       throw new HttpException("Ошибка запроса", HttpStatus.BAD_REQUEST)
     }
   }
 
   async fire(idEmployee: number){
-    const fireUser = await this.prismaService.user.update(
-      {
-        where:
-        {
-          id: idEmployee
+    const fireUser = await this.prismaService.user.update( {
+      where: {
+        id: idEmployee
         },
-        data:
-        {
+        data: {
           idCompany: null,
           role: Role.User
         }
@@ -307,30 +278,23 @@ export class CompanyService {
     return fireUser;
   }
 
-  async getAllEmployes(idCompany: number)
-  {
-    return await this.prismaService.company.findUnique(
-      {
-        where:
-        {
-          id: idCompany
-        },
-        select:
-        {
-          employee: 
-          {
-            select:
-            {
-              id: true,
-              name: true,
-              email: true,
-              role: true,
-              avatar: true,
-              company: true
-            }
+  async getAllEmployes(idCompany: number) {
+    return await this.prismaService.company.findUnique( {
+      where: {
+        id: idCompany
+      },
+      select: {
+        employee: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            avatar: true,
+            company: true
           }
         }
       }
-    )
+    })
   }
 }

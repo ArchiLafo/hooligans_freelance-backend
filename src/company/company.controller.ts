@@ -13,40 +13,34 @@ export class CompanyController {
 
   @UseGuards(JwtAuthenticationGuard, CompanyLeaderGuard)
   @Post('create_employee/:id')
-  async createEmployee(@Body() employeeData: CreateEmployeeDto, user: User, @Param('id', ParseIntPipe) id: number)
-  {
+  async createEmployee(@Body() employeeData: CreateEmployeeDto, user: User, @Param('id', ParseIntPipe) id: number) {
     console.log(employeeData)
     return await this.companyService.createEmployee(employeeData, id);
   }
 
   @Patch('registerEmployee')
-  async registerEmployee(@Body() employeeData: UpdateEmployeeDto)
-  {
+  async registerEmployee(@Body() employeeData: UpdateEmployeeDto) {
     return await this.companyService.registerEmployee(employeeData)
   }
 
   @Post('infoEmployee')
-  async getInfoEmployee(@Body() data)
-  {
+  async getInfoEmployee(@Body() data) {
     return await this.companyService.DataForRegisterEmployee(data.hash);
   }
 
   @UseGuards(JwtAuthenticationGuard, CompanyLeaderGuard)
   @Patch('fire_employee/:id')
-  async fire(@Param('id', ParseIntPipe) id: number, @Body() req)
-  {
+  async fire(@Param('id', ParseIntPipe) id: number, @Body() req) {
     return await this.companyService.fire(req.employeeId);
   }
 
   @Get('allEmployee/:id')
-  async getAllEmployes(@Param('id', ParseIntPipe) id: number)
-  {
+  async getAllEmployes(@Param('id', ParseIntPipe) id: number) {
     return await this.companyService.getAllEmployes(id);
   }
   
   // @Get('registerEmployee')
-  // async getHashData(@Body() dataHash)
-  // {
+  // async getHashData(@Body() dataHash) {
   //   return 
   // }
 }
