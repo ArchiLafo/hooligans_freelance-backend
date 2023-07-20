@@ -68,7 +68,7 @@ export class PlanService {
   //
   // Обновление времени услуги
   async update(idPlan: number, updateData: UpdatePlanDto) {
-    const datetime = DatetimeCustomization.customDatetime(updateData)
+    const datetime = new Date(Number(updateData.year), Number(updateData.month) - 1, Number(updateData.day), Number(updateData.hours), Number(updateData.minutes));
     return await this.prismaService.plan.update( {
       where: {
         id: idPlan

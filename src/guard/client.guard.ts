@@ -33,6 +33,7 @@ export default class ClientGuard implements CanActivate {
         if (checkedPlan.datetime < currentDate) {
             const deletePlan = await this.prismaService.plan.delete({where: {id: planId}})
             console.log("Удалена запись на время" + deletePlan)
+        }
 
         // либо ты админ
         if (user?.role.includes(Role.Admin)) {
@@ -50,5 +51,4 @@ export default class ClientGuard implements CanActivate {
         // либо ты автор
         return (user.id === checkedProduct.authorId);    
     }
-}
 }
