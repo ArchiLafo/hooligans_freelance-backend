@@ -35,7 +35,6 @@ export class CompanyService {
       ) 
       //const hash = `${await bcrypt.hash(newEmployee.id.toString(),10)}.${await bcrypt.hash(newEmployee.email, 10)}`
       const hash = `http://localhost:8081/register/${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
-      // console.log('Hash: ' + hash)
       await this.mailService.sendMail(newEmployee.email, 'Регистрация в компании', ('Ссылка для регистрации: \n' + hash));
       return hash;
     }
