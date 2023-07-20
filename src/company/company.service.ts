@@ -9,7 +9,56 @@ import { MailService } from 'src/mail/mail.service';
 import fs from 'fs';
 
 // const filePath = 'C:/Projects/hooligans_freelance-backend-1/src/mail/email.txt';
-const html = `
+
+@Injectable()
+export class CompanyService {
+  constructor(private readonly prismaService: PrismaService, private readonly dataHashService: DataHashService, private readonly mailService: MailService, ){}
+  async createEmployee(employeeData: CreateEmployeeDto, id: number)
+  {
+    const oldEmployee = await this.prismaService.user.findUnique(
+      {
+        where:
+        {
+          email: employeeData.email
+        }
+      }
+    )
+    if(!oldEmployee)
+    {
+      const newEmployee = await this.prismaService.user.create(
+        {
+          data: 
+          {
+            ...employeeData,
+            idCompany: id,
+            role: Role.Employee
+          } 
+        }
+      )
+
+      // // удаляем через день, чтобы не втыкал
+      // const delayInHours = 24;
+      // const deleteTime = new Date();
+      // deleteTime.setHours(deleteTime.getHours() + delayInHours);
+      
+      // // Устанавливаем таймер для удаления записи по указанному времени
+      // setTimeout(async () => {
+      //   try {
+      //     await this.prismaService.user.delete({
+      //       where: {
+      //         id: newEmployee.id,
+      //       }});
+      //       console.log(`Сотрудник с id ${newEmployee.id} удален спустя ${delayInHours} часа.`);
+      //     } 
+      //     catch (error) {
+      //       console.error('Ошибка при удалении сотрудника:', error);
+      //     }
+      //     deleteTime.getTime() - Date.now()});
+        
+      //const hash = `${await bcrypt.hash(newEmployee.id.toString(),10)}.${await bcrypt.hash(newEmployee.email, 10)}`
+      const hash = `http://localhost:8081/register/employee?hash=${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
+      const email = newEmployee.email; // Здесь получите реальное имя пользователя из вашего приложения
+      const html = `
     <!DOCTYPE html>
     <html>
     <body style="margin:0;padding:0" dir="ltr" bgcolor="#ffffff">
@@ -45,7 +94,7 @@ const html = `
                                                   <tbody>
                                                     <tr>
                                                       <td>
-                                                        <p style="margin:10px 0 10px 0;color:#565a5c;font-size:18px">Здравствуйте, 	!</p>
+                                                        <p style="margin:10px 0 10px 0;color:#565a5c;font-size:18px">Здравствуйте, ${email}!</p>
                                                         <p style="margin:10px 0 10px 0;color:#565a5c;font-size:18px">Вас пригласили зарегистрироваться в компании на сайте <a href="http://localhost:8081">Recordum</a>. <br>Перейдите по ссылке, чтобы зарегистрироваться в качестве сотрудника.</p>
                                                       </td>
                                                     </tr>
@@ -53,11 +102,11 @@ const html = `
                                                       <td height="20" style="line-height:20px">&nbsp;</td>
                                                     </tr>
                                                     <tr>
-                                                      <td><a href="{{link}}" style="color:#1b74e4;text-decoration:none;display:block;width:370px" target="_blank" data-saferedirecturl="{{link}}">
+                                                      <td><a href="${hash}" style="color:#1b74e4;text-decoration:none;display:block;width:370px" target="_blank" data-saferedirecturl="${hash}">
                                                           <table border="0" width="390" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
                                                             <tbody>
                                                               <tr>
-                                                                <td style="border-collapse:collapse;border-radius:3px;text-align:center;display:block;border:solid 1px #e2ff4a;padding:10px 16px 14px 16px;margin:0 2px 0 auto;min-width:80px;background-color:#e2ff4a"><a href="{{link}}" style="color:#e2ff4a;text-decoration:none;display:block" target="_blank" data-saferedirecturl="{{link}}">
+                                                                <td style="border-collapse:collapse;border-radius:3px;text-align:center;display:block;border:solid 1px #e2ff4a;padding:10px 16px 14px 16px;margin:0 2px 0 auto;min-width:80px;background-color:#e2ff4a"><a href="${hash}" style="color:#e2ff4a;text-decoration:none;display:block" target="_blank" data-saferedirecturl="${hash}">
                                                                     <center>
                                                                       <font size="3"><span style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;white-space:nowrap;font-weight:bold;vertical-align:middle;color:#010101;font-size:16px;line-height:16px"><span class="il">Зарегистрироваться</span></font>
                                                                     </center>
@@ -126,56 +175,6 @@ const html = `
 </body>
     </html>
     `;
-
-
-@Injectable()
-export class CompanyService {
-  constructor(private readonly prismaService: PrismaService, private readonly dataHashService: DataHashService, private readonly mailService: MailService, ){}
-  async createEmployee(employeeData: CreateEmployeeDto, id: number)
-  {
-    const oldEmployee = await this.prismaService.user.findUnique(
-      {
-        where:
-        {
-          email: employeeData.email
-        }
-      }
-    )
-    if(!oldEmployee)
-    {
-      const newEmployee = await this.prismaService.user.create(
-        {
-          data: 
-          {
-            ...employeeData,
-            idCompany: id,
-            role: Role.Employee
-          } 
-        }
-      )
-      
-      // // удаляем через день, чтобы не втыкал
-      // const delayInHours = 24;
-      // const deleteTime = new Date();
-      // deleteTime.setHours(deleteTime.getHours() + delayInHours);
-      
-      // // Устанавливаем таймер для удаления записи по указанному времени
-      // setTimeout(async () => {
-      //   try {
-      //     await this.prismaService.user.delete({
-      //       where: {
-      //         id: newEmployee.id,
-      //       }});
-      //       console.log(`Сотрудник с id ${newEmployee.id} удален спустя ${delayInHours} часа.`);
-      //     } 
-      //     catch (error) {
-      //       console.error('Ошибка при удалении сотрудника:', error);
-      //     }
-      //     deleteTime.getTime() - Date.now()});
-        
-      //const hash = `${await bcrypt.hash(newEmployee.id.toString(),10)}.${await bcrypt.hash(newEmployee.email, 10)}`
-      const hash = `http://localhost:8081/register/employee?hash=${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
-      const name = newEmployee.email; // Здесь получите реальное имя пользователя из вашего приложения
 
       // let html: string = ''; 
       // fs.readFile(filePath, 'utf8', (err, data) => {

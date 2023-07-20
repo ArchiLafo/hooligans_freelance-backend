@@ -31,7 +31,7 @@ export class CompanyController {
     return await this.companyService.DataForRegisterEmployee(data.hash);
   }
 
-  @UseGuards(JwtAuthenticationGuard)
+  @UseGuards(JwtAuthenticationGuard, CompanyLeaderGuard)
   @Patch('fire_employee/:id')
   async fire(@Param('id', ParseIntPipe) id: number, @Body() req)
   {
