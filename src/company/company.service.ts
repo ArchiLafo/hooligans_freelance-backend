@@ -111,7 +111,7 @@ export class CompanyService {
     console.log('idUser:' + idUser)
     if ((!idUser) || (!emailUser))
     {
-      throw new HttpException("Ошибка запроса", HttpStatus.FORBIDDEN)
+      throw new HttpException("Ошибка запроса", HttpStatus.BAD_REQUEST)
     }
     const user = await this.prismaService.user.findUnique(
     {
@@ -134,7 +134,7 @@ export class CompanyService {
     }
     else
     {
-      throw new HttpException("Данный пользователь уже активирован", HttpStatus.FORBIDDEN)
+      throw new HttpException("Ошибка запроса", HttpStatus.BAD_REQUEST)
     }
   }
 
