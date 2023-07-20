@@ -11,18 +11,8 @@ import { Plan } from '@prisma/client';
 import { MailService } from 'src/mail/mail.service';
 import fs from 'fs';
 
-@ApiTags('Products')
-@Controller('products')
-export class ProductController 
-{
-  constructor(private readonly productService: ProductService, private readonly mailService: MailService) {}
-
-  // тест электронной почты
-  @Post('mail/test')
-  async sendEmail() {
-    const link = 'http://localhost:8081/';
-    const name = 'John'; // Здесь получите реальное имя пользователя из вашего приложения
-    const html = `
+// const filePath = 'C:/Projects/hooligans_freelance-backend-1/src/mail/email.txt';
+const html = `
     <!DOCTYPE html>
     <html>
     <body style="margin:0;padding:0" dir="ltr" bgcolor="#ffffff">
@@ -139,6 +129,28 @@ export class ProductController
 </body>
     </html>
     `;
+
+@ApiTags('Products')
+@Controller('products')
+export class ProductController 
+{
+  constructor(private readonly productService: ProductService, private readonly mailService: MailService) {}
+
+  // тест электронной почты
+  @Post('mail/test')
+  async sendEmail() {
+    const link = 'http://localhost:8081/';
+    const name = 'Kirill'; // Здесь получите реальное имя пользователя из вашего приложения
+
+    // let html: string = '';
+    // fs.readFile(filePath, 'utf8', (err, data) => {
+    //   if (err) {
+    //     console.error('Ошибка чтения файла:', err);
+    //     return;
+    //   }
+    //   html = data;
+    // });
+    
     await this.mailService.sendMail('slimeboy871@gmail.com', 'Тест', html);
   }
 
