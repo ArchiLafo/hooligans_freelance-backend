@@ -35,7 +35,6 @@ export class CompanyService {
       ) 
       //const hash = `${await bcrypt.hash(newEmployee.id.toString(),10)}.${await bcrypt.hash(newEmployee.email, 10)}`
       const hash = `http://localhost:8081/register/?hash=${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
-      const link = hash;
       const name = newEmployee.email; // Здесь получите реальное имя пользователя из вашего приложения
       const html = `
       <!DOCTYPE html>
@@ -81,11 +80,11 @@ export class CompanyService {
                                                         <td height="20" style="line-height:20px">&nbsp;</td>
                                                       </tr>
                                                       <tr>
-                                                        <td><a href="${link}" style="color:#1b74e4;text-decoration:none;display:block;width:370px" target="_blank" data-saferedirecturl="${link}">
+                                                        <td><a href="${hash}" style="color:#1b74e4;text-decoration:none;display:block;width:370px" target="_blank" data-saferedirecturl="${hash}">
                                                             <table border="0" width="390" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
                                                               <tbody>
                                                                 <tr>
-                                                                  <td style="border-collapse:collapse;border-radius:3px;text-align:center;display:block;border:solid 1px #e2ff4a;padding:10px 16px 14px 16px;margin:0 2px 0 auto;min-width:80px;background-color:#e2ff4a"><a href="${link}" style="color:#e2ff4a;text-decoration:none;display:block" target="_blank" data-saferedirecturl="${link}">
+                                                                  <td style="border-collapse:collapse;border-radius:3px;text-align:center;display:block;border:solid 1px #e2ff4a;padding:10px 16px 14px 16px;margin:0 2px 0 auto;min-width:80px;background-color:#e2ff4a"><a href="${hash}" style="color:#e2ff4a;text-decoration:none;display:block" target="_blank" data-saferedirecturl="${hash}">
                                                                       <center>
                                                                         <font size="3"><span style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;white-space:nowrap;font-weight:bold;vertical-align:middle;color:#010101;font-size:16px;line-height:16px"><span class="il">Зарегистрироваться</span></font>
                                                                       </center>
