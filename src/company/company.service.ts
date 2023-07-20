@@ -177,8 +177,13 @@ export class CompanyService {
       //   }
       //   html = data;
       // });
-
-      await this.mailService.sendMail(newEmployee.email, 'Регистрация в компании', html);
+      try {
+        await this.mailService.sendMail(newEmployee.email, 'Регистрация в компании', html);
+      }
+      catch (error) {
+        console.log(error)
+        throw new HttpException('Неверный адрес электронной почты', HttpStatus.BAD_REQUEST);
+      }
       return hash;
     }
     else {
