@@ -61,7 +61,7 @@ export class CompanyService {
     )
     if (oldUser.name)
     {
-      throw new HttpException("Этот пользователь уже зарегестрирован", HttpStatus.FORBIDDEN)
+      throw new HttpException("Этот пользователь уже зарегистрирован", HttpStatus.BAD_REQUEST)
     }
     const user = await this.prismaService.user.update(
     {
@@ -131,7 +131,6 @@ export class CompanyService {
       throw new HttpException("Данный пользователь уже активирован", HttpStatus.FORBIDDEN)
     }
   }
-
 
   async fire(idEmployee: number){
     const fireUser = await this.prismaService.user.update(
