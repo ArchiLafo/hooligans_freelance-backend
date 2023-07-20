@@ -325,7 +325,8 @@ export class CompanyService {
               name: true,
               email: true,
               role: true,
-              avatar: true
+              avatar: true,
+              company: true
             }
           }
         }
