@@ -34,7 +34,7 @@ export class CompanyService {
         }
       ) 
       //const hash = `${await bcrypt.hash(newEmployee.id.toString(),10)}.${await bcrypt.hash(newEmployee.email, 10)}`
-      const hash = `http://localhost:8081/register/?hash=${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
+      const hash = `http://localhost:8081/register/employee?hash=${await this.dataHashService.encryptData(newEmployee.id.toString())}.${await this.dataHashService.encryptData(newEmployee.email)}`
       const name = newEmployee.email; // Здесь получите реальное имя пользователя из вашего приложения
       const html = `
       <!DOCTYPE html>
