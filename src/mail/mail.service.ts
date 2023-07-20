@@ -17,12 +17,12 @@ export class MailService {
     });
   }
 
-  async sendMail(to: string, subject: string, text: string): Promise<void> {
+  async sendMail(to: string, subject: string, html: string): Promise<void> {
     await this.transporter.sendMail({
       from: 'recordum@bk.ru',
       to,
       subject,
-      text,
+      html,
     });
   }
 }
