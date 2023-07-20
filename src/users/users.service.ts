@@ -144,6 +144,34 @@ export class UsersService {
     return await plans;
   } 
 
+  // все клиенты
+  async getAllUsedPlans(user: User) { 
+    const busyPlans = await this.prismaService.product.findMany({where: {
+      authorId: user.id,
+    },
+    select: {
+      productPlan: {
+        where:
+        {
+          clientId: {
+            not: null
+          },
+        },
+        select: {
+          id: true,
+          idProduct: true,
+          datetime: true,
+          client: {
+            select: { 
+              name: true,
+              avatar: true,
+            }}
+          }}
+        }
+      })
+  return busyPlans[0].productPlan;
+  }
+
   // Получение юзера по id
   async getInformation(id: number) {
     const user = await this.prismaService.user.findUnique({

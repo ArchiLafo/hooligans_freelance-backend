@@ -7,6 +7,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/s
 import PlanGuard from 'src/guard/plan.guard';
 import ClientGuard from 'src/guard/client.guard';
 import { UpdatePlanDto } from './dto/update-plan.dto';
+import AuthorGuard from 'src/guard/author.guard';
 
 
 @ApiTags('Plan')

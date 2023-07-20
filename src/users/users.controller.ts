@@ -121,4 +121,11 @@ export class UsersController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.getInformation(Number(id));
   }
+
+  @UseGuards(JwtAuthenticationGuard)
+  @Get('get/plans')
+  async getUsedPlans(@Req() request: RequestWithUser) {
+    const user = request.user;  
+    return this.usersService.getAllUsedPlans(user);
+  }
 }
