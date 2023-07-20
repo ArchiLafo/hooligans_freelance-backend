@@ -107,6 +107,12 @@ export class CompanyService {
     const split_hash: string[] = hash.split('.')
     const idUser: number = Number(await this.dataHashService.decryptData(split_hash[0]))
     const emailUser: string = await this.dataHashService.decryptData(split_hash[1])
+    console.log('email:' + emailUser)
+    console.log('idUser:' + idUser)
+    if ((!idUser) || (!emailUser))
+    {
+      throw new HttpException("Ошибка запроса", HttpStatus.FORBIDDEN)
+    }
     const user = await this.prismaService.user.findUnique(
     {
       where:
