@@ -19,7 +19,20 @@ export class ProductController
   // тест электронной почты
   @Post('mail/test')
   async sendEmail() {
-    await this.mailService.sendMail('slimeboy871@gmail.com', 'Тестовое письмо', 'Это тестовое письмо');
+    const username = 'John'; // Здесь получите реальное имя пользователя из вашего приложения
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+          <title>Приветственное письмо</title>
+      </head>
+      <body>
+          <h1>Добро пожаловать, ${username}!</h1>
+          <p>Спасибо за регистрацию на нашем сайте. Мы очень рады приветствовать вас!</p>
+      </body>
+      </html>
+    `;
+    await this.mailService.sendMail('slimeboy871@gmail.com', 'Тестовое письмо', html);
   }
 
   @Get()
